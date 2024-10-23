@@ -5,10 +5,10 @@
       <router-link to="/new-client">
         <b-button class="mx-2" variant="primary">Dodaj novog klijenta</b-button>
       </router-link>
-      <router-link to="/novi-dobavljac">
+      <router-link to="/dodaj-dobavljaca">
         <b-button class="mx-2" variant="primary">Dodaj novog dobavljaca</b-button>
       </router-link>
-      <router-link to="/novi-kupac">
+      <router-link to="/dodaj-kupca">
         <b-button class="mx-2" variant="primary">Dodaj novog kupca</b-button>
       </router-link>
     </div>

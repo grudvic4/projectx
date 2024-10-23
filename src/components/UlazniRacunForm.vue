@@ -244,6 +244,7 @@
 
 <script>
 import { useClientStore } from '@/store/clientStore';
+import { useDobavljacStore } from '@/store/dobavljacStore';
 
 export default {
   data() {
@@ -275,7 +276,7 @@ export default {
         pauslaNaknada: null,
         ulazniPDVNePrikazuje: null
       },
-      dobavljacOptions: [
+      staticDobavljacOptions: [
         { value: null, text: 'Izaberite dobavljaca' },
         { value: 'bht', text: 'BH Telecom' },
         { value: 'sika', text: 'Sika BiH' },
@@ -304,6 +305,18 @@ export default {
         { value: 'usd', text: 'USD' },
       ],
     };
+  },
+  computed: {
+    dobavljacOptions() {
+      const store = useDobavljacStore();
+      // Map dobavljac array from the store to { value, text } format
+      const dynamicDobavljacOptions = store.dobavljac.map(item => ({
+        value: item.name.toLowerCase(),
+        text: item.name
+      }));
+      // Combine static options with dynamic ones
+      return [...this.staticDobavljacOptions, ...dynamicDobavljacOptions];
+    }
   },
   methods: {
     onSubmit() {

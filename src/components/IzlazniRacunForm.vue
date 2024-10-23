@@ -236,6 +236,7 @@
 
 <script>
 import { useClientStore } from '@/store/clientStore';
+import { useKupacStore } from '@/store/kupacStore';
 
 export default {
   data() {
@@ -266,7 +267,7 @@ export default {
         iznosPdv: null,
         neoporezivaOsnovica: null
       },
-      kupacOptions: [
+      staticKupacOptions: [
         { value: null, text: 'Izaberite kupca' },
         { value: 'bht', text: 'BH Telecom' },
         { value: 'sika', text: 'Sika BiH' },
@@ -307,6 +308,18 @@ export default {
         { value: 'ne', text: 'Ne' },
       ],
     };
+  },
+  computed: {
+    kupacOptions() {
+      const store = useKupacStore();
+      // Map dobavljac array from the store to { value, text } format
+      const dynamicKupacOptions = store.kupac.map(item => ({
+        value: item.name.toLowerCase(),
+        text: item.name
+      }));
+      // Combine static options with dynamic ones
+      return [...this.staticKupacOptions, ...dynamicKupacOptions];
+    }
   },
   methods: {
     onSubmit() {

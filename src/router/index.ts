@@ -6,6 +6,8 @@ import ClientsList from "@/pages/ClientList.vue";
 import DodajUlazniRacun from "@/pages/DodajUlazniRacun.vue";
 import DodajIzlazniRacun from "@/pages/DodajIzlazniRacun.vue";
 import SingleClient from "@/pages/SingleClient.vue";
+import DodajDodavljacaPage from "@/pages/DodajDobavljacaPage.vue";
+import DodajKupcaPage from "@/pages/DodajKupcaPage.vue";
 
 Vue.use(VueRouter);
 
@@ -48,6 +50,16 @@ const routes: Array<RouteConfig> = [
     path : "/account?clientKey=:clientKey",
     name : "account",
     component : SingleClient
+  },
+  {
+    path : "/dodaj-dobavljaca",
+    name : "dodaj-dobavljaca",
+    component : DodajDodavljacaPage
+  },
+  {
+    path : "/dodaj-kupca",
+    name : "dodaj-kupca",
+    component : DodajKupcaPage
   }
 ];
 
