@@ -3,8 +3,7 @@
     <nav>
       <router-link to="/">Home</router-link> |
       <router-link to="/new-client">Novi klijent</router-link> | 
-      <router-link to="/clients">Klijenti</router-link> |
-      <router-link to="/dodaj-ulazni-racun">Knjiga Ulaznih Racuna</router-link>
+      <router-link to="/clients">Klijenti</router-link>
     </nav>
     <router-view />
   </div>

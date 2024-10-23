@@ -1,11 +1,11 @@
 <template>
   <b-container>
     <b-form @submit.prevent="onSubmit">
-      <b-form-group label="Broj KUF" label-for="broj-kuf" class="mb-2">
+      <b-form-group label="Broj racuna" label-for="broj-racuna" class="mb-2">
         <b-form-input
-          id="broj-kuf"
+          id="racun-kuf"
           type="number"
-          v-model="form.brojKuf"
+          v-model="form.brojRacuna"
           required
           :state="!hasSubmitted || form.type !== null"
         ></b-form-input>
@@ -20,33 +20,34 @@
           class="mb-2" />
       </b-form-group>
 
-      <b-form-group label="Dobavljac" label-for="dobavljac" class="mb-2">
+      <b-form-group label="Kupac" label-for="kupac" class="mb-2">
         <b-form-select
-          id="dobavljac"
-          v-model="form.dobavljac"
-          :options="dobavljacOptions"
+          id="kupac"
+          v-model="form.kupac"
+          :options="kupacOptions"
           required
           :state="!hasSubmitted || form.entitet !== null"
         ></b-form-select>
       </b-form-group>
 
-      <b-form-group label="Broj fakture dobavljaca" label-for="broj-fakture-dobavljaca" class="mb-2">
+      <b-form-group label="Narudzbenica" label-for="narudzbenica" class="mb-2">
         <b-form-input
-          id="broj-fakture-dobavljaca"
+          id="narudzbenica"
           type="number"
-          v-model="form.brojFakture"
+          v-model="form.narudzbenica"
           required
           :state="!hasSubmitted || form.type !== null"
         ></b-form-input>
       </b-form-group>
 
-      <b-form-group label="Datum fakture dobavljaca" label-for="datum-fakture-dobavljaca" class="mb-2">
-        <b-form-datepicker 
-          id="datum-fakture-dobavljaca" 
-          v-model="form.datumFakture" 
-          placeholder="Izaberite datum"
-          :date-format-options="{ day: 'numeric', month: 'numeric',year: 'numeric' }"
-          class="mb-2" />
+      <b-form-group label="Napomena" label-for="napomena" class="mb-2">
+        <b-form-input
+          id="napomena"
+          type="text"
+          v-model="form.napomena"
+          required
+          :state="!hasSubmitted || form.type !== null"
+        ></b-form-input>
       </b-form-group>
 
       <b-form-group label="Rok placanja" label-for="rok-placanja" class="mb-2">
@@ -73,6 +74,16 @@
           id="obracun-pdv"
           v-model="form.obracunPdv"
           :options="obracunPdvOptions"
+          required
+          :state="!hasSubmitted || form.entitet !== null"
+        ></b-form-select>
+      </b-form-group>
+
+      <b-form-group label="Vrsta fakture" label-for="vrsta-fakture" class="mb-2">
+        <b-form-select
+          id="vrsta-fakture"
+          v-model="form.vrstaFakture"
+          :options="vrstaFaktureOptions"
           required
           :state="!hasSubmitted || form.entitet !== null"
         ></b-form-select>
@@ -108,17 +119,7 @@
         ></b-form-select>
       </b-form-group>
 
-      <b-form-group label="Bruto iznos u valuti placanja" label-for="bruto" class="mb-2">
-        <b-form-input
-          id="bruto"
-          type="number"
-          v-model="form.bruto"
-          required
-          :state="!hasSubmitted || form.type !== null"
-        ></b-form-input>
-      </b-form-group>
-
-      <b-form-group label="Neto iznos u valuti placanja" label-for="neto" class="mb-2">
+      <b-form-group label="Neto iznos u valuti placanja sa porezom" label-for="neto" class="mb-2">
         <b-form-input
           id="neto"
           type="number"
@@ -126,6 +127,16 @@
           required
           :state="!hasSubmitted || form.type !== null"
         ></b-form-input>
+      </b-form-group>
+
+      <b-form-group label="Ino usluge" label-for="ino-usluge" class="mb-2">
+        <b-form-select
+          id="ino-usluge"
+          v-model="form.inoUsluge"
+          :options="inoUslugeOptions"
+          required
+          :state="!hasSubmitted || form.entitet !== null"
+        ></b-form-select>
       </b-form-group>
 
       <b-form-group label="Bruto iznos sa porezom" label-for="bruto-pdv" class="mb-2">
@@ -148,17 +159,7 @@
         ></b-form-input>
       </b-form-group>
 
-      <b-form-group label="Iznos poreza" label-for="iznos-pdv" class="mb-2">
-        <b-form-input
-          id="iznos-pdv"
-          type="number"
-          v-model="form.iznosPdv"
-          required
-          :state="!hasSubmitted || form.type !== null"
-        ></b-form-input>
-      </b-form-group>
-
-      <b-form-group label="Rabat dobavljaca" label-for="rabat" class="mb-2">
+      <b-form-group label="Rabat kupcu" label-for="rabat" class="mb-2">
         <b-form-input
           id="rabat"
           type="number"
@@ -187,56 +188,47 @@
           class="mb-2" />
       </b-form-group>
 
-      <b-form-group label="Osnovica ulaznog poreza koji se moze odbiti" label-for="osnovica-ulaznog-pdv" class="mb-2">
+      <b-form-group label="Statisticka vrijednost izvoza" label-for="statisticka-vrijednost" class="mb-2">
         <b-form-input
-          id="osnovica-ulaznog-pdv"
+          id="statisticka-vrijednost"
           type="number"
-          v-model="form.osnovicaUlazniPDVodbit"
+          v-model="form.statistickaVrijednost"
           required
           :state="!hasSubmitted || form.type !== null"
         ></b-form-input>
       </b-form-group>
 
-      <b-form-group label="Ulazni porez koji se moze odbiti [17%]" label-for="ulazni-pdv" class="mb-2">
+      <b-form-group label="Osnovica poreza" label-for="osnovica-pdv" class="mb-2">
         <b-form-input
-          id="ulazni-pdv"
+          id="osnovica-pdv"
           type="number"
-          v-model="form.ulazniPDVodbit"
+          v-model="form.osnovicaPDV"
           required
           :state="!hasSubmitted || form.type !== null"
         ></b-form-input>
       </b-form-group>
 
-      <b-form-group label="Iznos nabavke od poljoprivrednika" label-for="nabavka-poljoprivrednik" class="mb-2">
+
+      <b-form-group label="Iznos poreza" label-for="iznos-pdv" class="mb-2">
         <b-form-input
-          id="nabavka-poljoprivrednik"
+          id="iznos-pdv"
           type="number"
-          v-model="form.nabavkaPoljoprivrednika"
+          v-model="form.iznosPdv"
           required
           :state="!hasSubmitted || form.type !== null"
         ></b-form-input>
       </b-form-group>
-
-      <b-form-group label="Pausalna naknada za poljoprivrednike [5%]" label-for="pausalna-naknada" class="mb-2">
+      
+      <b-form-group label="Neoporeziva osnovica" label-for="neoporeziva-osnovica" class="mb-2">
         <b-form-input
-          id="pausalna-naknada"
+          id="neoporeziva-osnovica"
           type="number"
-          v-model="form.pauslaNaknada"
+          v-model="form.neoporezivaOsnovica"
           required
           :state="!hasSubmitted || form.type !== null"
-        ></b-form-input>
-      </b-form-group>
-
-      <b-form-group label="Ulazni porez koji se ne prikazuje na stranici" label-for="ulazni-pdv-ne-prikazuje" class="mb-2">
-        <b-form-input
-          id="ulazni-pdv-ne-prikazuje"
-          type="number"
-          v-model="form.ulazniPDVNePrikazuje"
-          required
-          :state="!hasSubmitted || form.type !== null"
-        ></b-form-input>
-      </b-form-group>
-
+          ></b-form-input>
+        </b-form-group>
+        
       <b-button type="submit" variant="primary">Submit</b-button>
     </b-form>
   </b-container>
@@ -250,37 +242,43 @@ export default {
     return {
       hasSubmitted: false,
       form: {
-        brojKuf: null,
+        brojRacuna: null,
         date: null,
-        dobavljac: null,
-        brojFakture: null,
-        datumFakture: null,
+        kupac: null,
+        narudzbenica: null,
+        napomena: null,
         rokPlacanja: null,
         rokDatum: null,
         obracunPdv: null,
+        vrstaFakture: null,
         vrstaPrometa: null,
         knjiga: null,
         valuta: null,
-        bruto: null,
         neto: null,
+        inoUsluge: null,
         brutoPDV: null,
         netoPDV: null,
-        iznosPdv: null,
         rabat: null,
         kasaSkonto: null,
         placanjeDo: null,
-        osnovicaUlazniPDVodbit: null,
-        ulazniPDVodbit: null,
-        nabavkaPoljoprivrednika: null,
-        pauslaNaknada: null,
-        ulazniPDVNePrikazuje: null
+        statistickaVrijednost: null,
+        osnovicaPDV: null,
+        iznosPdv: null,
+        neoporezivaOsnovica: null
       },
-      dobavljacOptions: [
-        { value: null, text: 'Izaberite dobavljaca' },
+      kupacOptions: [
+        { value: null, text: 'Izaberite kupca' },
         { value: 'bht', text: 'BH Telecom' },
         { value: 'sika', text: 'Sika BiH' },
         { value: 'penny', text: 'Penny' }
       ],
+      vrstaFaktureOptions: [
+        { value: null, text: 'Odaberite' },
+        { value: 'faktura', text: 'Faktura' },
+        { value: 'avans', text: 'Avans' },
+        { value: 'gotovinski', text: 'Gotovinski' }
+      ],
+      
       obracunPdvOptions: [
         { value: null, text: 'Odaberite' },
         { value: 'oporezivo', text: 'Oporeziva nabavka' },
@@ -303,6 +301,11 @@ export default {
         { value: 'eur', text: 'EUR' },
         { value: 'usd', text: 'USD' },
       ],
+      inoUslugeOptions: [
+        { value: null, text: 'Odaberite' },
+        { value: 'da', text: 'Da' },
+        { value: 'ne', text: 'Ne' },
+      ],
     };
   },
   methods: {
@@ -317,8 +320,8 @@ export default {
 
       if (client) {
       // If client exists, update the client's data by adding form data
-      client.kuf = client.kuf || []; // Ensure `entries` array exists
-      client.kuf.push({ ...this.form }); // Add form data as a new entry
+      client.kif = client.kif || []; // Ensure `entries` array exists
+      client.kif.push({ ...this.form }); // Add form data as a new entry
 
       // Save the updated clients array back to localStorage
       clientStore.saveClients();
@@ -330,7 +333,7 @@ export default {
       
       // Reset form after submission
       this.form = {
-        brojKuf: null,
+        brojRacuna: null,
         date: null,
         dobavljac: null,
         brojFakture: null,

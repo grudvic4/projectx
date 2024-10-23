@@ -23,6 +23,7 @@
             variant="outline-success"
             size="sm"
             class="mx-3"
+            @click="$router.push({ name: 'dodaj-izlazni-racun', params: { clientKey: clientKey } })"
             >
             Dodaj izlazni racun
         </b-button>

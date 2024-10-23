@@ -11,11 +11,14 @@
           <p><strong>JIB:</strong> {{ client.jib }}</p>
           <p><strong>Tip:</strong> {{ client.type }}</p>
           <!-- Add more fields as needed -->
-          <h4>Entries:</h4>
+          <h4>Knjiga ulaznih racuna:</h4>
           <div class="table-responsive">
-            <b-table :items="client.entries" :fields="fields"></b-table>
+            <b-table :items="client.kuf" :fields="fields"></b-table>
           </div>
-        
+          <h4>Knjiga izlaznih racuna:</h4>
+          <div class="table-responsive">
+            <b-table :items="client.kif" :fields="fields"></b-table>
+          </div>
         </div>
         <div v-else>
           <p>Klijent nije pronađen.</p>

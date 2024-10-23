@@ -4,6 +4,7 @@ import HomeView from "../pages/HomeView.vue";
 import NewClient from "@/pages/NewClientPage.vue";
 import ClientsList from "@/pages/ClientList.vue";
 import DodajUlazniRacun from "@/pages/DodajUlazniRacun.vue";
+import DodajIzlazniRacun from "@/pages/DodajIzlazniRacun.vue";
 import SingleClient from "@/pages/SingleClient.vue";
 
 Vue.use(VueRouter);
@@ -37,6 +38,11 @@ const routes: Array<RouteConfig> = [
     path : "/dodaj-ulazni-racun/:clientKey",
     name : "dodaj-ulazni-racun",
     component : DodajUlazniRacun
+  },
+  {
+    path : "/dodaj-izlazni-racun/:clientKey",
+    name : "dodaj-izlazni-racun",
+    component : DodajIzlazniRacun
   },
   {
     path : "/account?clientKey=:clientKey",

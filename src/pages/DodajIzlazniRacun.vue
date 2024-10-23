@@ -1,17 +1,17 @@
 <template>
   <div class="container">
-    <ulazni-racun-form class="mb-5" />
+    <izlazni-racun-form class="mb-5" />
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import UlazniRacunForm from "@/components/UlazniRacunForm.vue";
+import IzlazniRacunForm from "@/components/IzlazniRacunForm.vue";
 
 @Component({
   components: {
-    UlazniRacunForm
+    IzlazniRacunForm
   },
 })
-export default class DodajUlazniRacun extends Vue {}
+export default class DodajIzlazniRacun extends Vue {}
 </script>
