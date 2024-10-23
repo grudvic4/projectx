@@ -1,6 +1,10 @@
 import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
-import HomeView from "../views/HomeView.vue";
+import HomeView from "../pages/HomeView.vue";
+import NewClient from "@/pages/NewClientPage.vue";
+import ClientsList from "@/pages/ClientList.vue";
+import DodajUlazniRacun from "@/pages/DodajUlazniRacun.vue";
+import SingleClient from "@/pages/SingleClient.vue";
 
 Vue.use(VueRouter);
 
@@ -17,8 +21,28 @@ const routes: Array<RouteConfig> = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () =>
-      import(/* webpackChunkName: "about" */ "../views/AboutView.vue"),
+      import(/* webpackChunkName: "about" */ "../pages/AboutView.vue"),
   },
+  {
+    path: "/new-client",
+    name: "new-client",
+    component: NewClient,
+  },
+  {
+    path: "/clients",
+    name: "clients",
+    component: ClientsList,
+  },
+  {
+    path : "/dodaj-ulazni-racun/:clientKey",
+    name : "dodaj-ulazni-racun",
+    component : DodajUlazniRacun
+  },
+  {
+    path : "/account?clientKey=:clientKey",
+    name : "account",
+    component : SingleClient
+  }
 ];
 
 const router = new VueRouter({
