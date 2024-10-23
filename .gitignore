@@ -1,7 +1,6 @@
 .DS_Store
 node_modules
-/dist
-
+dist  # Remove the '#' in front of this line to include the dist folder
 
 # local env files
 .env.local
