@@ -1,14 +1,21 @@
 <template>
-  <div class="container">
-    <create-client-form class="mb-5" />
-    <b-button 
-    class="mb-5"
-      variant="outline-primary"
-      size="xl"
-      @click="$router.push('/clients')"
-      >
-      Pogledaj sve klijente
-    </b-button>
+  <div class="container py-5">
+    <b-row>
+      <b-col>
+        <create-client-form class="mb-5" />
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col class="text-center">
+        <b-button 
+          variant="outline-primary"
+          size="xl"
+          @click="$router.push('/clients')"
+          >
+          Pogledaj sve klijente
+        </b-button>
+      </b-col>
+    </b-row>
   </div>
 </template>
 
