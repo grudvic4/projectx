@@ -10,15 +10,6 @@
           <p><strong>PDV broj:</strong> {{ client.pdv }}</p>
           <p><strong>JIB:</strong> {{ client.jib }}</p>
           <p><strong>Tip:</strong> {{ client.type }}</p>
-          <!-- Add more fields as needed -->
-          <h4>Knjiga ulaznih racuna:</h4>
-          <div class="table-responsive">
-            <b-table :items="client.kuf" :fields="fields"></b-table>
-          </div>
-          <h4>Knjiga izlaznih racuna:</h4>
-          <div class="table-responsive">
-            <b-table :items="client.kif" :fields="fields"></b-table>
-          </div>
         </div>
         <div v-else>
           <p>Klijent nije pronađen.</p>
@@ -30,6 +21,7 @@
 
 <script>
 import { useClientStore } from '@/store/clientStore';
+import clientMock from '@/data/clientMock'; // Import your mock data
 
 export default {
   data() {
@@ -41,8 +33,11 @@ export default {
     const clientKey = this.$route.params.clientKey;
     const clientStore = useClientStore();
 
+    // Combine clients from store and mock data
+    const combinedClients = [...clientStore.clients, ...clientMock];
+
     // Find the client based on the clientKey from the URL
-    this.client = clientStore.clients.find(client => client.clientKey === clientKey);
+    this.client = combinedClients.find(client => client.clientKey === clientKey);
 
     if (!this.client) {
       console.error('Client not found with clientKey:', clientKey);

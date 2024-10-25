@@ -7,6 +7,7 @@
 </template>
 
 <script>
+import { BFooter } from 'bootstrap-vue';
 export default {
   data() {
     return {

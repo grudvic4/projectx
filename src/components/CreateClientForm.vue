@@ -1,13 +1,5 @@
 <template>
   <div>
-    <b-row>
-      <b-col cols="12">
-        <b-breadcrumb>
-          <b-breadcrumb-item to="/">Home</b-breadcrumb-item>
-          <b-breadcrumb-item active>Dodaj novog klijenta</b-breadcrumb-item>
-        </b-breadcrumb>
-      </b-col>
-    </b-row>
     <b-row class="text-center">
       <b-col cols="12">
         <h1 class="mb-4">Dodaj novog klijenta</h1>
