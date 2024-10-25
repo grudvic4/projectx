@@ -245,6 +245,7 @@
 <script>
 import { useClientStore } from '@/store/clientStore';
 import { useDobavljacStore } from '@/store/dobavljacStore';
+import dobavljacMock from '@/data/dobavljacMock';
 
 export default {
   data() {
@@ -276,12 +277,6 @@ export default {
         pauslaNaknada: null,
         ulazniPDVNePrikazuje: null
       },
-      staticDobavljacOptions: [
-        { value: null, text: 'Izaberite dobavljaca' },
-        { value: 'bht', text: 'BH Telecom' },
-        { value: 'sika', text: 'Sika BiH' },
-        { value: 'penny', text: 'Penny' }
-      ],
       obracunPdvOptions: [
         { value: null, text: 'Odaberite' },
         { value: 'oporezivo', text: 'Oporeziva nabavka' },
@@ -310,12 +305,21 @@ export default {
     dobavljacOptions() {
       const store = useDobavljacStore();
       // Map dobavljac array from the store to { value, text } format
-      const dynamicDobavljacOptions = store.dobavljac.map(item => ({
+      const storeDobavljacOptions = store.dobavljac.map(item => ({
         value: item.name.toLowerCase(),
         text: item.name
       }));
-      // Combine static options with dynamic ones
-      return [...this.staticDobavljacOptions, ...dynamicDobavljacOptions];
+      const mockDobavljacOptions = dobavljacMock.map(item => ({
+        value: item.name.toLowerCase(),
+        text: item.name
+      }));
+
+      // Combine dobavljacMock with dynamic ones
+      return [
+        { value: null, text: 'Izaberite dobavljaca' }, 
+        ...storeDobavljacOptions,
+        ...mockDobavljacOptions, 
+        ];
     }
   },
   methods: {
@@ -339,8 +343,6 @@ export default {
       console.error('Client not found');
     }
 
-    
-      
       // Reset form after submission
       this.form = {
         brojKuf: null,

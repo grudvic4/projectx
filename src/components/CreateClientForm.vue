@@ -126,8 +126,7 @@
           </b-col> 
           <b-col cols="6">
             <b-button class="mt-3" type="submit" variant="primary">Submit</b-button>
-          </b-col> 
-         
+          </b-col>
         </b-row>
         </b-form>
       </b-col>
@@ -148,8 +147,6 @@
       <b-button variant="primary" @click="$bvModal.hide('success-modal')">Dodaj novog klijenta</b-button>
       <b-button class="mx-3" variant="outline-primary" @click="$router.push('/clients')">Pogledaj postojece klijente</b-button>
     </b-modal>
-
-
   </div>
 </template>
 
@@ -263,7 +260,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style >
 .modal-header {
   display: flex;
   align-items: center; 

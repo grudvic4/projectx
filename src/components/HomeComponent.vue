@@ -22,7 +22,9 @@
         </router-link>
       </div>
       <div>
-          <b-button disabled variant="outline-primary disabled" >Lista dobavljaca</b-button>
+        <router-link to="/dobavljaci">
+          <b-button variant="outline-primary" >Lista dobavljaca</b-button>
+        </router-link>
       </div>
     </b-card>
   </b-col>
@@ -64,7 +66,9 @@
         </router-link>
       </div>
       <div>
-        <b-button disabled variant="outline-danger">Lista kupaca</b-button>
+        <router-link to="/kupci">
+          <b-button variant="outline-danger">Lista kupaca</b-button>
+        </router-link>
       </div>
       
     </b-card>

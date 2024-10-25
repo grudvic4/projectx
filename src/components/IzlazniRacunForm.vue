@@ -237,6 +237,7 @@
 <script>
 import { useClientStore } from '@/store/clientStore';
 import { useKupacStore } from '@/store/kupacStore';
+import kupacMock  from '@/data/kupacMock';
 
 export default {
   data() {
@@ -311,14 +312,24 @@ export default {
   },
   computed: {
     kupacOptions() {
-      const store = useKupacStore();
+      const store = useKupacStore()
+      ;
       // Map dobavljac array from the store to { value, text } format
-      const dynamicKupacOptions = store.kupac.map(item => ({
+      const storeKupacOptions = store.kupac.map(item => ({
         value: item.name.toLowerCase(),
         text: item.name
       }));
+
+      const mockKupacOptions = kupacMock.map(item => ({
+        value: item.name.toLowerCase(),
+        text: item.name
+      }));
+
       // Combine static options with dynamic ones
-      return [...this.staticKupacOptions, ...dynamicKupacOptions];
+      return [
+        { value: null, text: 'Izaberite kupca' },
+        ...storeKupacOptions,
+        ...mockKupacOptions, ];
     }
   },
   methods: {

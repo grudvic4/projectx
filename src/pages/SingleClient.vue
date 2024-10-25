@@ -15,6 +15,8 @@
           </b-tab>
           <b-tab title="Prazan primjer"><p>Ne znam sta se ocekivali, rekao sam fino da je prazno.</p></b-tab>
           <b-tab title="Knjiga EPO 2" disabled><p>I'm a disabled tab!</p></b-tab>
+          <b-tab title="Dobavljaci"><dobavljac-list-component /></b-tab>
+          <b-tab title="Kupci"><kupci-list-component /></b-tab>
         </b-tabs>
       </b-col>
     </b-row>
@@ -26,12 +28,16 @@ import { Component, Vue } from "vue-property-decorator";
 import SingleClient from "@/components/SingleClient.vue";
 import KnjigaEpo from "@/components/KnjigaEpo.vue";
 import clientMock from '@/data/clientMock';
+import DobavljacListComponent from '@/components/DobavljaciListComponent.vue'; // Adjust the path if needed
 import { useClientStore } from "@/store/clientStore";
+import KupciListComponent from "@/components/KupciListComponent.vue";
 
 @Component({
   components: {
     SingleClient,
     KnjigaEpo,
+    DobavljacListComponent,
+    KupciListComponent,
   },
 })
 export default class NewClient extends Vue {

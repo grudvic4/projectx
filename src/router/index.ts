@@ -8,6 +8,8 @@ import DodajIzlazniRacun from "@/pages/DodajIzlazniRacun.vue";
 import SingleClient from "@/pages/SingleClient.vue";
 import DodajDodavljacaPage from "@/pages/DodajDobavljacaPage.vue";
 import DodajKupcaPage from "@/pages/DodajKupcaPage.vue";
+import DobavljacList from "@/pages/DobavljacList.vue";
+import KupacList from "@/pages/KupacList.vue";
 
 Vue.use(VueRouter);
 
@@ -60,6 +62,16 @@ const routes: Array<RouteConfig> = [
     path : "/dodaj-kupca",
     name : "dodaj-kupca",
     component : DodajKupcaPage
+  },
+  {
+    path : "/dobavljaci",
+    name : "dobavljaci",
+    component : DobavljacList
+  },
+  {
+    path : "/kupci",
+    name : "kupci",
+    component : KupacList
   }
 ];
 
