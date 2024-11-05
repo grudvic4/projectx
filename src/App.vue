@@ -4,18 +4,18 @@
     <div class="content">
       <router-view />
     </div>
-    <FooterComponent />
+    <MainFooter />
   </div>
 </template>
 
 <script>
-import MainNavbar from '@/components/MainNavbar.vue';
-import FooterComponent from '@/components/FooterComponent.vue';
+import MainNavbar from '@/components/layout/MainNavbar.vue';
+import MainFooter from '@/components/layout/MainFooter.vue';
 
 export default {
   components: {
     MainNavbar,
-    FooterComponent,
+    MainFooter,
   },
 };
 </script>

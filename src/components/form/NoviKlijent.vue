@@ -9,6 +9,65 @@
       <b-col cols="12" lg="8">
         <b-form @submit.prevent="onSubmit">
           <b-row>
+            <b-col cols="12">
+              <h4>Podaci o vlasniku</h4>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col cols="6">
+              <b-form-group label="Ime i prezime" label-for="vlasnik-ime-prezime" class="mb-2">
+                <b-form-input
+                  id="vlasnik-ime-prezime"
+                  v-model="form.vlasnikImePrezime"
+                  required
+                  :state="!hasSubmitted || form.name.length > 0"
+                  placeholder="Upisite ime i prezime vlasnika"
+                ></b-form-input>
+              </b-form-group>
+            </b-col> 
+            <b-col cols="6">
+              <b-form-group label="Adresa vlasnika" label-for="vlasnik-adresa" class="mb-2">
+                <b-form-input
+                  id="vlasnik-adresa"
+                  v-model="form.vlasnikAdresa"
+                  :state="!hasSubmitted || form.address.length > 0"
+                  placeholder="Upisite adresu klijenta"
+                ></b-form-input>
+              </b-form-group>
+            </b-col> 
+            <b-col cols="6">
+              <b-form-group
+                    label="JMBG"
+                    label-for="vlasnik-jmbg"
+                    description="Unesite ispravan 12-cifreni JMBG broj"
+                    class="mb-2"
+                  >
+                    <b-form-input
+                      id="vlasnik-jmbg"
+                      v-model="form.vlasnikJMBG"
+                      type="text"
+                      maxlength="12"
+                      placeholder="Upisite JMBG vlasnika"
+                      :state="!hasSubmitted || pdvValid || pdvTouched"
+                      required
+                      @input="hasSubmitted = false"
+                    >
+                  </b-form-input>
+                <b-form-invalid-feedback v-if="hasSubmitted && !pdvValid">
+                  Unesite ispravan 12-cifreni JMBG broj.
+                </b-form-invalid-feedback>
+              </b-form-group>
+            </b-col> 
+          </b-row>
+          <b-row class="my-3 border-top">
+
+          </b-row>
+          <b-row>
+            <b-col cols="12">
+              <h4>Podaci o privrednom subjektu</h4>
+            </b-col>
+          </b-row>
+          <b-row>
             <b-col cols="6">
               <b-form-group label="Oblik" label-for="client-type" class="mb-2">
                 <b-form-select
@@ -101,12 +160,6 @@
           </b-col> 
           <b-col cols="4">
             <b-form-group class="mb-2">
-              <b-form-checkbox v-model="form.dobavljac" id="client-dobavljac">
-                Dobavljač
-              </b-form-checkbox>
-              <b-form-checkbox v-model="form.kupac" id="client-kupac">
-                Kupac
-              </b-form-checkbox>
               <b-form-checkbox v-model="form.pdvObveznik" id="client-pdvObveznik">
                 PDV Obveznik
               </b-form-checkbox>
@@ -160,6 +213,8 @@ export default {
       pdvTouched: false, // Track if the PDV field has been interacted with
       jibTouched: false,
       form: {
+        vlasnikImePrezime: '',
+        vlasnikAdresa: '',
         type: null,
         address: '',
         name: '',
@@ -215,14 +270,14 @@ export default {
 
       const clientStore = useClientStore();
       clientStore.addClient({
+        vlasnikImePrezime: this.form.vlasnikImePrezime,
+        vlasnikAdresa: this.form.vlasnikAdresa,
         type: this.form.type,
         name: this.form.name,
         address: this.form.address,
         grad: this.form.grad,
         pdv: this.form.pdv,
         jib: this.form.jib,
-        dobavljac: this.form.dobavljac,
-        kupac: this.form.kupac,
         pdvObveznik: this.form.pdvObveznik,
         entitet: this.form.entitet,
         clientKey
@@ -235,14 +290,14 @@ export default {
     resetForm() {
       // Reset form after submission
       this.form = {
+        vlasnikImePrezime: '',
+        vlasnikAdresa: '',
         type: null,
         name: '',
         address: '',
         grad: '',
         pdv: '',
         jib: '',
-        dobavljac: false,
-        kupac: false,
         pdvObveznik: false,
         entitet: null
       };

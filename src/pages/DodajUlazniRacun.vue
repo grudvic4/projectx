@@ -1,16 +1,16 @@
 <template>
   <div class="container">
-    <ulazni-racun-form class="mb-5" />
+    <ulazni-racun class="mb-5" />
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import UlazniRacunForm from "@/components/UlazniRacunForm.vue";
+import UlazniRacun from "@/components/form/UlazniRacun.vue";
 
 @Component({
   components: {
-    UlazniRacunForm
+    UlazniRacun
   },
 })
 export default class DodajUlazniRacun extends Vue {}

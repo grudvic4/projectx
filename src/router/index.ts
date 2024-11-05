@@ -2,13 +2,13 @@ import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
 import HomeView from "../pages/HomeView.vue";
 import NewClient from "@/pages/NewClientPage.vue";
-import ClientsList from "@/pages/ClientList.vue";
+import ListaKlijenata from "@/pages/ListaKlijenata.vue";
 import DodajUlazniRacun from "@/pages/DodajUlazniRacun.vue";
 import DodajIzlazniRacun from "@/pages/DodajIzlazniRacun.vue";
 import SingleClient from "@/pages/SingleClient.vue";
-import DodajDodavljacaPage from "@/pages/DodajDobavljacaPage.vue";
+import DodajDobavljaca from "@/pages/DodajDobavljaca.vue";
 import DodajKupcaPage from "@/pages/DodajKupcaPage.vue";
-import DobavljacList from "@/pages/DobavljacList.vue";
+import ListaDobavljaca from "@/pages/ListaDobavljaca.vue";
 import KupacList from "@/pages/KupacList.vue";
 
 Vue.use(VueRouter);
@@ -20,15 +20,6 @@ const routes: Array<RouteConfig> = [
     component: HomeView,
   },
   {
-    path: "/about",
-    name: "about",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../pages/AboutView.vue"),
-  },
-  {
     path: "/new-client",
     name: "new-client",
     component: NewClient,
@@ -36,7 +27,7 @@ const routes: Array<RouteConfig> = [
   {
     path: "/clients",
     name: "clients",
-    component: ClientsList,
+    component: ListaKlijenata,
   },
   {
     path : "/dodaj-ulazni-racun/:clientKey",
@@ -56,7 +47,7 @@ const routes: Array<RouteConfig> = [
   {
     path : "/dodaj-dobavljaca",
     name : "dodaj-dobavljaca",
-    component : DodajDodavljacaPage
+    component : DodajDobavljaca
   },
   {
     path : "/dodaj-kupca",
@@ -66,7 +57,7 @@ const routes: Array<RouteConfig> = [
   {
     path : "/dobavljaci",
     name : "dobavljaci",
-    component : DobavljacList
+    component : ListaDobavljaca
   },
   {
     path : "/kupci",

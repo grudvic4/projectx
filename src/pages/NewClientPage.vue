@@ -10,7 +10,7 @@
     </b-row>
     <b-row>
       <b-col>
-        <create-client-form class="mb-5" />
+        <novi-klijent class="mb-5" />
       </b-col>
     </b-row>
     <b-row>
@@ -29,13 +29,13 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import CreateClientForm from "@/components/CreateClientForm.vue" // @ is an alias to /src
-import ClientListComponent from "@/components/ClientListComponent.vue" // @ is an alias to /src
+import NoviKlijent from "@/components/form/NoviKlijent.vue" // @ is an alias to /src
+import PostojeciKlijenti from "@/components/list/PostojeciKlijenti.vue" // @ is an alias to /src
 
 @Component({
   components: {
-    CreateClientForm,
-    ClientListComponent,
+    NoviKlijent,
+    PostojeciKlijenti,
   },
 })
 export default class newClient extends Vue {}

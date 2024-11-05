@@ -18,11 +18,11 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import ClientListComponent from "@/components/ClientListComponent.vue" // @ is an alias to /src
+import PostojeciKlijenti from "@/components/list/PostojeciKlijenti.vue" // @ is an alias to /src
 
 @Component({
   components: {
-    ClientListComponent,
+    PostojeciKlijenti,
   },
 })
 export default class ClientList extends Vue {}

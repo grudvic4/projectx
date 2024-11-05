@@ -10,7 +10,7 @@
     </b-row>
     <b-row class="mb-5">
       <b-col cols="12">
-        <kupci-list-component />
+        <postojeci-klijenti />
       </b-col>
     </b-row>
   </div>
@@ -18,11 +18,11 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import KupciListComponent from "@/components/KupciListComponent.vue";// @ is an alias to /src
+import PostojeciKlijenti from "@/components/list/PostojeciKlijenti.vue";// @ is an alias to /src
 
 @Component({
   components: {
-    KupciListComponent,
+    PostojeciKlijenti,
   },
 })
 export default class DobavljacList extends Vue {}

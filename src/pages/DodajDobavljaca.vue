@@ -10,7 +10,7 @@
     </b-row>
     <b-row>
       <b-col>
-        <novi-dobavljac-forma class="mb-5" />
+        <novi-dobavljac class="mb-5" />
       </b-col>
     </b-row>
   </div>
@@ -18,11 +18,11 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import NoviDobavljacForma from "@/components/NoviDobavljacForma.vue";
+import NoviDobavljac from "@/components/form/NoviDobavljac.vue";
 
 @Component({
   components: {
-    NoviDobavljacForma,
+    NoviDobavljac,
   },
 })
 export default class noviDobavljac extends Vue {}

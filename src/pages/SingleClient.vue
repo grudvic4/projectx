@@ -25,19 +25,19 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import SingleClient from "@/components/SingleClient.vue";
-import KnjigaEpo from "@/components/KnjigaEpo.vue";
+import DetaljiKlijnet from "@/components/single/DetaljiKlijnet.vue";
+import KnjigaEpo from "@/components/list/KnjigaEpo.vue";
 import clientMock from '@/data/clientMock';
-import DobavljacListComponent from '@/components/DobavljaciListComponent.vue'; // Adjust the path if needed
+import PostojeciDobavljaci from '@/components/list/PostojeciDobavljaci.vue'; // Adjust the path if needed
 import { useClientStore } from "@/store/clientStore";
-import KupciListComponent from "@/components/KupciListComponent.vue";
+import PostojeciKupci from "@/components/list/PostojeciKupci.vue";
 
 @Component({
   components: {
-    SingleClient,
+    DetaljiKlijnet,
     KnjigaEpo,
-    DobavljacListComponent,
-    KupciListComponent,
+    PostojeciDobavljaci,
+    PostojeciKupci,
   },
 })
 export default class NewClient extends Vue {
