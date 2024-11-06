@@ -4,13 +4,13 @@
       <b-col cols="12">
         <b-breadcrumb>
           <b-breadcrumb-item to="/">Home</b-breadcrumb-item>
-          <b-breadcrumb-item active>Dodaj novi ulazni racun</b-breadcrumb-item>
+          <b-breadcrumb-item active>Dodaj novi izvod</b-breadcrumb-item>
         </b-breadcrumb>
       </b-col>
     </b-row>
     <b-row>
       <b-col>
-        <ulazni-racun class="mb-5" />
+        <NoviIzvod class="mb-5" />
       </b-col>
     </b-row>
   </b-container>
@@ -18,12 +18,12 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import UlazniRacun from "@/components/form/UlazniRacun.vue";
+import NoviIzvod from "@/components/form/NoviIzvod.vue";
 
 @Component({
   components: {
-    UlazniRacun
+    NoviIzvod
   },
 })
-export default class DodajUlazniRacun extends Vue {}
+export default class DodajNoviIzvod extends Vue {}
 </script>

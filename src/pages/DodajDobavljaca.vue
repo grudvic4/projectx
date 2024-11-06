@@ -10,7 +10,7 @@
     </b-row>
     <b-row>
       <b-col>
-        <novi-dobavljac class="mb-5" />
+        <NoviDobavljac class="mb-5" />
       </b-col>
     </b-row>
   </div>

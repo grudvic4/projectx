@@ -20,7 +20,7 @@
                   id="vlasnik-ime-prezime"
                   v-model="form.vlasnikImePrezime"
                   required
-                  :state="!hasSubmitted || form.name.length > 0"
+                  :state="!hasSubmitted || form.vlasnikImePrezime.length > 0"
                   placeholder="Upisite ime i prezime vlasnika"
                 ></b-form-input>
               </b-form-group>
@@ -30,7 +30,7 @@
                 <b-form-input
                   id="vlasnik-adresa"
                   v-model="form.vlasnikAdresa"
-                  :state="!hasSubmitted || form.address.length > 0"
+                  :state="!hasSubmitted || form.vlasnikAdresa.length > 0"
                   placeholder="Upisite adresu klijenta"
                 ></b-form-input>
               </b-form-group>
@@ -39,22 +39,21 @@
               <b-form-group
                     label="JMBG"
                     label-for="vlasnik-jmbg"
-                    description="Unesite ispravan 12-cifreni JMBG broj"
                     class="mb-2"
                   >
                     <b-form-input
                       id="vlasnik-jmbg"
                       v-model="form.vlasnikJMBG"
                       type="text"
-                      maxlength="12"
+                      maxlength="13"
                       placeholder="Upisite JMBG vlasnika"
-                      :state="!hasSubmitted || pdvValid || pdvTouched"
+                      :state="!hasSubmitted || JMBGValid || jmbgTouched"
                       required
                       @input="hasSubmitted = false"
                     >
                   </b-form-input>
-                <b-form-invalid-feedback v-if="hasSubmitted && !pdvValid">
-                  Unesite ispravan 12-cifreni JMBG broj.
+                <b-form-invalid-feedback v-if="hasSubmitted && !JMBGValid">
+                  Unesite ispravan 13-cifreni JMBG broj.
                 </b-form-invalid-feedback>
               </b-form-group>
             </b-col> 
@@ -212,9 +211,11 @@ export default {
       hasSubmitted: false,
       pdvTouched: false, // Track if the PDV field has been interacted with
       jibTouched: false,
+      jmbgTouched: false,
       form: {
         vlasnikImePrezime: '',
         vlasnikAdresa: '',
+        vlasnikJMBG: '',
         type: null,
         address: '',
         name: '',
@@ -249,6 +250,10 @@ export default {
     jibValid() {
       const jibRegex = /^\d{13}$/;
       return jibRegex.test(this.form.jib);
+    },
+    JMBGValid() {
+      const JMBGRegex = /^\d{13}$/;
+      return JMBGRegex.test(this.form.vlasnikJMBG);
     }
   },
   methods: {
@@ -266,12 +271,17 @@ export default {
       return;
     }
 
-    const clientKey = btoa(this.form.pdv);
+    if (!this.JMBGValid) {
+      alert('Unesite ispravan 13-cifreni JMBG broj.');
+      return;
+    }
+    const clientKey = btoa(this.form.jib);
 
       const clientStore = useClientStore();
       clientStore.addClient({
         vlasnikImePrezime: this.form.vlasnikImePrezime,
         vlasnikAdresa: this.form.vlasnikAdresa,
+        vlasnikJMBG: this.form.vlasnikJMBG,
         type: this.form.type,
         name: this.form.name,
         address: this.form.address,
@@ -292,6 +302,7 @@ export default {
       this.form = {
         vlasnikImePrezime: '',
         vlasnikAdresa: '',
+        vlasnikJMBG: '',
         type: null,
         name: '',
         address: '',
@@ -309,6 +320,10 @@ export default {
     },
     validateJIB() {
       this.jibTouched = true; // Mark JIB as touched
+      this.hasSubmitted = true; // Show validation on blur
+    },
+    validateJMBG() {
+      this.jmbgTouched = true; // Mark JIB as touched
       this.hasSubmitted = true; // Show validation on blur
     }
   }

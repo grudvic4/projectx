@@ -10,6 +10,7 @@ import DodajDobavljaca from "@/pages/DodajDobavljaca.vue";
 import DodajKupcaPage from "@/pages/DodajKupcaPage.vue";
 import ListaDobavljaca from "@/pages/ListaDobavljaca.vue";
 import KupacList from "@/pages/KupacList.vue";
+import NoviIzvod from "@/components/form/NoviIzvod.vue";
 
 Vue.use(VueRouter);
 
@@ -63,6 +64,11 @@ const routes: Array<RouteConfig> = [
     path : "/kupci",
     name : "kupci",
     component : KupacList
+  },
+  {
+    path: '/izvod',
+    name: 'izvod',
+    component: NoviIzvod
   }
 ];
 

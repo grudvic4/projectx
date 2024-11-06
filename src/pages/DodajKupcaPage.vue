@@ -10,7 +10,7 @@
     </b-row>
     <b-row>
       <b-col>
-        <novi-kupac class="mb-5" />   
+        <NoviKupac class="mb-5" />   
       </b-col>
     </b-row>
   </div>
