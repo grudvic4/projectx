@@ -11,6 +11,7 @@ import DodajKupcaPage from "@/pages/DodajKupcaPage.vue";
 import ListaDobavljaca from "@/pages/ListaDobavljaca.vue";
 import KupacList from "@/pages/KupacList.vue";
 import NoviIzvod from "@/components/form/NoviIzvod.vue";
+import DodajNoviBankovniRacun from "@/pages/DodajBankovniRacun.vue";
 
 Vue.use(VueRouter);
 
@@ -69,6 +70,12 @@ const routes: Array<RouteConfig> = [
     path: '/izvod',
     name: 'izvod',
     component: NoviIzvod
+  },
+  {
+    path: "/dodaj-bankovni-racun?clientKey=:clientKey",
+    name: 'dodaj-bankovni-racun',
+    component: DodajNoviBankovniRacun
+
   }
 ];
 
