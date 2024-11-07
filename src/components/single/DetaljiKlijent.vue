@@ -30,8 +30,13 @@
             <template #cell(nazivBanke)="data">
               {{ data.item.nazivBanke }}
             </template>
-            <template #cell(ziro)="data">
-              {{ data.item.ziroRacun }}
+            <template #cell(ziroRacun)="data">
+              <span 
+                class="clickable-ziro" 
+                @click="goToEditBankAccount(data.item.ziroRacun)"
+              >
+                {{ data.item.ziroRacun }}
+              </span>
             </template>
             <template #cell(stanje)="data">
               <b-button
@@ -112,6 +117,10 @@ export default {
     };
   },
   methods: {
+    goToEditBankAccount(ziroRacun) {
+      // Redirect to the edit page, assuming you have a route set up for editing a bank account
+      this.$router.push({ name: 'EditBankAccount', params: { ziroRacun } });
+    },
     setAktivniRacun(ziroRacun) {
       // Set the active status for the selected bank account
       this.client.bankAccounts = this.client.bankAccounts.map(account => ({

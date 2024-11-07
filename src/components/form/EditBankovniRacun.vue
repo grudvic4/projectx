@@ -2,7 +2,7 @@
   <div>
     <b-row class="text-center">
       <b-col cols="12">
-        <h1 class="mb-4">Dodaj novi bankovni racun</h1>
+        <h1 class="mb-4">Edit bankovi racun</h1>
       </b-col>
     </b-row>  
     <b-row class="justify-content-center">
@@ -101,65 +101,95 @@ export default {
   data() {
     return {
       hasSubmitted: false,
-      clientKey: null, // Holds the clientKey from the URL
+      clientKey: null,
+      ziroRacun: null,
       form: {
         nazivBanke: '',
         ziroRacun: '',
         vlasnikRacuna: '',
+        provizija: '',
+        odrzavanje: '',
         active: false
       },
     };
   },
   created() {
-    // Get the clientKey from the URL
-    const urlParams = new URLSearchParams(window.location.search);
-    this.clientKey = urlParams.get('clientKey');
+    // Get the clientKey and ziroRacun from the route parameters
+    this.clientKey = this.$route.params.clientKey;
+    this.ziroRacun = this.$route.params.ziroRacun;
+
+    // Fetch client and bank account data
+    this.prefillForm();
   },
   methods: {
-  onSubmit() {
-    this.hasSubmitted = true;
-
-    // Find the client by clientKey
-    const clientStore = useClientStore();
-    const client = clientStore.clients.find(client => client.clientKey === this.clientKey);
-
-    if (client) {
-      // Ensure bankAccounts is initialized
-      if (!client.bankAccounts) {
-        client.bankAccounts = [];
+    prefillForm() {
+      const clientStore = useClientStore();
+      const client = clientStore.clients.find(client => client.clientKey === this.clientKey);
+      
+      if (client) {
+        // Find the specific bank account by ziroRacun
+        const bankAccount = client.bankAccounts.find(account => account.ziroRacun === this.ziroRacun);
+        
+        if (bankAccount) {
+          // Pre-fill form fields with bank account data
+          this.form = {
+            nazivBanke: bankAccount.nazivBanke,
+            ziroRacun: bankAccount.ziroRacun,
+            vlasnikRacuna: bankAccount.vlasnikRacuna,
+            provizija: bankAccount.provizija || '',
+            odrzavanje: bankAccount.odrzavanje || '',
+            active: bankAccount.active
+          };
+        } else {
+          console.warn('Bank account not found with the provided ziroRacun');
+        }
+      } else {
+        console.warn('Client not found with the provided clientKey');
       }
+    },
+    onSubmit() {
+      this.hasSubmitted = true;
 
-      // Check if this is the first bank account for the client
-      const isFirstBankAccount = client.bankAccounts.length === 0;
+      const clientStore = useClientStore();
+      const client = clientStore.clients.find(client => client.clientKey === this.clientKey);
 
-      // Set active to true only for the first bank account
-      const bankAccount = { 
-        nazivBanke: this.form.nazivBanke,
-        ziroRacun: this.form.ziroRacun,
-        vlasnikRacuna: this.form.vlasnikRacuna,
-        active: isFirstBankAccount, // Set active to true if it is the first bank account
+      if (client) {
+        // Find the specific bank account and update it
+        const bankAccount = client.bankAccounts.find(account => account.ziroRacun === this.ziroRacun);
+        
+        if (bankAccount) {
+          // Update bank account data
+          bankAccount.nazivBanke = this.form.nazivBanke;
+          bankAccount.ziroRacun = this.form.ziroRacun;
+          bankAccount.vlasnikRacuna = this.form.vlasnikRacuna;
+          bankAccount.provizija = this.form.provizija;
+          bankAccount.odrzavanje = this.form.odrzavanje;
+          bankAccount.active = this.form.active;
+
+          // Save the updated clients data
+          clientStore.saveClients();
+
+          // Show success modal
+          this.$bvModal.show('success-modal');
+          this.resetForm();
+        } else {
+          console.warn('Bank account not found with the provided ziroRacun');
+        }
+      } else {
+        console.warn('Client not found with the provided clientKey');
+      }
+    },
+    resetForm() {
+      this.form = {
+        nazivBanke: '',
+        ziroRacun: '',
+        vlasnikRacuna: '',
+        provizija: '',
+        odrzavanje: '',
+        active: false
       };
-
-      // Add the bank account to the client
-      client.bankAccounts.push(bankAccount);
-      clientStore.saveClients();
-
-      // Show success modal
-      this.$bvModal.show('success-modal');
-      this.resetForm();
-    } else {
-      console.warn('Client not found with the provided clientKey');
+      this.hasSubmitted = false;
     }
-  },
-  resetForm() {
-    this.form = {
-      nazivBanke: '',
-      ziroRacun: '',
-      vlasnikRacuna: '',
-      active: false
-    };
-    this.hasSubmitted = false;
   }
-}
 };
 </script>

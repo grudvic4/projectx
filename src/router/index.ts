@@ -13,6 +13,7 @@ import KupacList from "@/pages/KupacList.vue";
 import NoviIzvod from "@/components/form/NoviIzvod.vue";
 import DodajNoviBankovniRacun from "@/pages/DodajBankovniRacun.vue";
 import NovaBlagajna from "@/components/form/NovaBlagajna.vue";
+import EditBankovniRacun from "@/components/form/EditBankovniRacun.vue";
 
 Vue.use(VueRouter);
 
@@ -82,6 +83,11 @@ const routes: Array<RouteConfig> = [
     name: 'dodaj-bankovni-racun',
     component: DodajNoviBankovniRacun
 
+  },
+  {
+    path: '/edit-bank-account/:clientKey/:ziroRacun',
+    name: 'EditBankAccount',
+    component: EditBankovniRacun,
   }
 ];
 
