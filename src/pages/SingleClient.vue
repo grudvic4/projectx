@@ -25,6 +25,9 @@
           <b-tab title="Knjiga EPO 1044">
             <knjiga-epo :clients="combinedClients"/>
           </b-tab>
+          <b-tab title="Knjiga KPR 1041">
+            <KnjigaKPR :clients="combinedClients"/>
+          </b-tab>
         </b-tabs>
       </b-col>
     </b-row>
@@ -41,6 +44,7 @@ import { useClientStore } from "@/store/clientStore";
 import PostojeciKupci from "@/components/list/PostojeciKupci.vue";
 import KlijentKuf from "@/components/list/KlijentKuf.vue";
 import KlijentKif from "@/components/list/KlijentKif.vue";
+import KnjigaKPR from "@/components/list/KnjigaKPR.vue";
 
 @Component({
   components: {
@@ -50,6 +54,7 @@ import KlijentKif from "@/components/list/KlijentKif.vue";
     KnjigaEpo,
     PostojeciDobavljaci,
     PostojeciKupci,
+    KnjigaKPR,
   },
 })
 export default class NewClient extends Vue {

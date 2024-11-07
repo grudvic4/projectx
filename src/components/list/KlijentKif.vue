@@ -23,11 +23,19 @@
           <template #cell(neto)="data">
             {{ data.item.neto }}
           </template>
+          <template #cell(placeno-datum)="data">
+            {{ data.item.datumPlacanja }}
+          </template>
+          <template #cell(placeno-iznos)="data">
+            {{ data.item.iznosUplate }}
+          </template>
           <template #cell(kprRedniBr)="data">
             {{ data.index + 1 }}
           </template>
-          <template #cell(akcija)>
-            <b-button variant="outline-success" size="sm">Dodaj izvod</b-button>
+          <template #cell(akcija)="data">
+            <router-link :to="getBlagajnaLink(data.item.brojRacuna)">
+              <b-button variant="outline-success" size="sm">Dodaj blagajnu</b-button>
+            </router-link>
           </template>
         </b-table>
       </b-col>
@@ -62,7 +70,15 @@ export default {
       ]
     };
   },
-  
+  methods: {
+    getBlagajnaLink(brojRacuna) {
+      return {
+        name: 'blagajna',
+        params: { clientKey: this.$route.params.clientKey }, // Pass clientKey as a param
+        query: { brojRacuna: brojRacuna } // Add brojKuf as a query parameter
+      };
+    }
+  },
   mounted() {
     const clientKey = this.$route.params.clientKey;
     const clientStore = useClientStore();
