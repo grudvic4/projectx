@@ -3,10 +3,10 @@
     <b-row>
       <b-col cols="12">
         <h2>Knjiga KPR 1041</h2>
-        <div >
+        <div>
           <table class="table">
             <thead>
-             <tr>
+              <tr>
                 <th>7) Red. br.</th>
                 <th>8) Datum prihoda/rashoda</th>
                 <th>9) Broj dokumenta</th>
@@ -19,53 +19,57 @@
                 <th>16) U robi / materijalu</th>
                 <th>17) Bruto place zaposlenika</th>
                 <th>18) Placeni doprinosi poduzetnika</th>
-                <th>19) Ostalo</th> 
+                <th>19) Ostalo</th>
                 <th>20) PDV u rashodima</th>
                 <th>21) Ukupni rashodi</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(client, index) in client.kif" :key="client.brojRacuna">
-                <td>{{ index + 1 }}</td>
-                <td>{{ client.kupac }}</td>
-                <td>{{ client.brojRacuna }}</td>
-                <td>{{ client.date }}</td>
-                <td>{{ client.iznosUplate }}</td>
-                <td>0</td> <!-- Add your data here -->
-                <td>0</td> <!-- Add your data here -->
-                <td>0</td> <!-- Add your data here -->
-                <td>{{ client.iznosUplate }}</td> <!-- Add your data here -->
-                <td></td> <!-- Add your data here -->
-                <td></td> <!-- Add your data here -->
-                <td></td> <!-- Add your data here -->
-                <td>{{ index + 1 }}</td>
+              <tr v-if="filteredKif.length === 0 && filteredKuf.length === 0">
+                <td colspan="15">No data available</td>
               </tr>
-              <tr v-for="(client, index) in client.kuf" :key="client.brojKuf">
+              <tr v-for="(client, index) in filteredKif" :key="client.brojRacuna">
                 <td>{{ index + 1 }}</td>
-                <td>{{ client.dobavljac }}</td>
-                <td></td> <!-- Add your data here -->
-                <td></td> <!-- Add your data here -->
-                <td></td> <!-- Add your data here -->
-                <td></td> <!-- Add your data here -->
-                <td></td> <!-- Add your data here -->
-                <td>{{ client.brojKuf }}</td>
                 <td>{{ client.date }}</td>
-                <td>{{ client.neto }}</td>
-                <td></td> <!-- Add your data here -->
-                <td></td> <!-- Add your data here -->
+                <td>{{ client.brojRacuna }}</td>
+                <td></td>
+                <td>{{ client.iznosUplate }}</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>{{ client.iznosUplate }}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr v-for="(client, index) in filteredKuf" :key="client.brojKuf">
                 <td>{{ index + 1 }}</td>
+                <td>{{ client.date }}</td>
+                <td>{{ client.brojKuf }}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>{{ client.iznosUplate }}</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>{{ client.iznosUplate }}</td>
               </tr>
             </tbody>
           </table>
         </div>
       </b-col>
-    </b-row>  
+    </b-row>
   </b-container>
 </template>
 
 <script>
 import { useClientStore } from '@/store/clientStore';
-import clientMock from '@/data/clientMock'; // Import your mock data
 
 export default {
   props: {
@@ -79,13 +83,24 @@ export default {
       client: null // Holds the found client data
     };
   },
-  
+  computed: {
+    filteredKif() {
+      return this.client && this.client.kif
+        ? this.client.kif.filter(item => item.iznosUplate !== null && item.iznosUplate > 0)
+        : [];
+    },
+    filteredKuf() {
+      return this.client && this.client.kuf
+        ? this.client.kuf.filter(item => item.iznosUplate !== null && item.iznosUplate > 0)
+        : [];
+    },
+  },
   mounted() {
     const clientKey = this.$route.params.clientKey;
     const clientStore = useClientStore();
 
     // Combine clients from store and mock data
-    const combinedClients = [...clientStore.clients, ...clientMock];
+    const combinedClients = [...clientStore.clients];
 
     // Find the client based on the clientKey from the URL
     this.client = combinedClients.find(client => client.clientKey === clientKey);
