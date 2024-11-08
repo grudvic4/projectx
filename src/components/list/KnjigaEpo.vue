@@ -29,14 +29,14 @@
                 <td>{{ client.brojRacuna }}</td>
                 <td>{{ client.date }}</td>
                 <td>{{ client.neto }}</td>
+                <td>{{ client.datumPlacanja }}</td> <!-- Add your data here -->
+                <td>{{ client.iznosUplate }}</td> <!-- Add your data here -->
                 <td></td> <!-- Add your data here -->
                 <td></td> <!-- Add your data here -->
                 <td></td> <!-- Add your data here -->
                 <td></td> <!-- Add your data here -->
                 <td></td> <!-- Add your data here -->
-                <td></td> <!-- Add your data here -->
-                <td></td> <!-- Add your data here -->
-                <td>{{ index + 1 }}</td>
+                <td></td>
               </tr>
               <tr v-for="(client, index) in client.kuf" :key="client.brojKuf">
                 <td>{{ index + 1 }}</td>
@@ -48,10 +48,10 @@
                 <td></td> <!-- Add your data here -->
                 <td>{{ client.brojKuf }}</td>
                 <td>{{ client.date }}</td>
-                <td>{{ client.neto }}</td>
-                <td></td> <!-- Add your data here -->
-                <td></td> <!-- Add your data here -->
-                <td>{{ index + 1 }}</td>
+                <td>{{ client.bruto }}</td>
+                <td>{{ client.datumPlacanja }}</td> <!-- Add your data here -->
+                <td>{{ client.iznosUplate }}</td> <!-- Add your data here -->
+                <td></td>
               </tr>
             </tbody>
           </table>
