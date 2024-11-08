@@ -33,8 +33,8 @@
             {{ data.index + 1 }}
           </template>
           <template #cell(akcija)="data">
-            <router-link :to="getBlagajnaLink(data.item.brojRacuna)">
-              <b-button variant="outline-success" size="sm">Dodaj blagajnu</b-button>
+            <router-link :to="getIzvodLink(data.item.brojRacuna)">
+              <b-button variant="outline-success" size="sm">Dodaj izvod</b-button>
             </router-link>
           </template>
         </b-table>
@@ -71,9 +71,9 @@ export default {
     };
   },
   methods: {
-    getBlagajnaLink(brojRacuna) {
+    getIzvodLink(brojRacuna) {
       return {
-        name: 'blagajna',
+        name: 'izvod',
         params: { clientKey: this.$route.params.clientKey }, // Pass clientKey as a param
         query: { brojRacuna: brojRacuna } // Add brojKuf as a query parameter
       };

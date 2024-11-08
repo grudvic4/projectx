@@ -30,6 +30,7 @@
                     v-model="form.datumPlacanja"
                     placeholder="Izaberite datum plaćanja"
                     :date-format-options="{ day: 'numeric', month: 'numeric', year: 'numeric' }"
+                    required
                     class="mb-2"
                   />
                 </b-form-group>
@@ -197,7 +198,12 @@ export default {
   },
   methods: {
     addEntry(type) {
-      const selectedEntry = this.client[type.toLowerCase()].find(entry => entry.brojKuf === this.form.brojKuf || entry.brojRacuna === this.form.brojRacuna);
+      let selectedEntry = null;
+      if (type === 'KUF') {
+        selectedEntry = this.client.kuf.find(entry => entry.brojKuf === this.form.brojKuf);
+      } else if (type === 'KIF') {
+        selectedEntry = this.client.kif.find(entry => entry.brojRacuna === this.form.brojRacuna);
+      }
       if (selectedEntry) {
         const iznosUplate = selectedEntry.neto || selectedEntry.bruto;
 
@@ -280,7 +286,18 @@ export default {
     const clientKey = this.$route.params.clientKey;
     const clientStore = useClientStore();
     this.client = clientStore.clients.find(client => client.clientKey === clientKey);
+     const brojKufQuery = this.$route.query.brojKuf;
+     const brojRacunaQuery = this.$route.query.brojRacuna;
+     
+      if (brojKufQuery) { // Use the correct variable name here
+        this.form.brojKuf = brojKufQuery;
+        this.addEntry('KUF');
+      }
 
+      if (brojRacunaQuery) { // Use the correct variable name here
+        this.form.brojRacuna = brojRacunaQuery;
+        this.addEntry('KIF');
+      }
     if (this.client && this.client.kuf) {
       this.kufOptions = [
         { value: null, text: 'Izaberite kuf' }, // First option for kuf
@@ -301,8 +318,6 @@ export default {
       ];
     }
 
-    // Log client data for debugging purposes
-    console.log('Client:', this.client);
   },
 };
 </script>
