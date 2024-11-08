@@ -340,6 +340,11 @@ export default {
     };
   },
   computed: {
+    nextKufNumber() {
+      const store = useClientStore();
+      const nextKufNumber = store.clients.find(client => client.clientKey === this.$route.params.clientKey).kuf.length + 1;
+      return nextKufNumber;  // Assuming `clientStore` holds the Kufs and it's an array
+    },
     dobavljacOptions() {
       const store = useDobavljacStore();
       // Map dobavljac array from the store to { value, text } format
@@ -414,6 +419,8 @@ export default {
   mounted() {
     const clientKey = this.$route.params.clientKey;
     console.log('Client Key:', clientKey); // Now you have the clientKey from the URL
+    this.form.brojKuf = this.nextKufNumber;
+    console.log('KUF INDEX:', this.nextKufNumber); // Now you have the next KUF number
   }
 };
 </script>

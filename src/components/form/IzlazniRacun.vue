@@ -346,6 +346,11 @@ export default {
     };
   },
   computed: {
+    nextKifNumber() {
+      const store = useClientStore();
+      const nextKifNumber = store.clients.find(client => client.clientKey === this.$route.params.clientKey).kif.length + 1;
+      return nextKifNumber;
+    },
     kupacOptions() {
       const store = useKupacStore()
       ;
@@ -422,7 +427,9 @@ export default {
   },
   mounted() {
     const clientKey = this.$route.params.clientKey;
-    console.log('Client Key:', clientKey); // Now you have the clientKey from the URL
+    console.log('Client Key:', clientKey);
+    console.log(this.nextKifNumber) // Now you have the clientKey from the URL
+    this.form.brojRacuna = this.nextKifNumber;
   }
 };
 </script>
