@@ -106,6 +106,8 @@ export default {
         nazivBanke: '',
         ziroRacun: '',
         vlasnikRacuna: '',
+        provizija: '',
+        odrzavanje: '',
         active: false
       },
     };
@@ -137,6 +139,8 @@ export default {
         nazivBanke: this.form.nazivBanke,
         ziroRacun: this.form.ziroRacun,
         vlasnikRacuna: this.form.vlasnikRacuna,
+        provizija: this.form.provizija,
+        odrzavanje: this.form.odrzavanje,
         active: isFirstBankAccount, // Set active to true if it is the first bank account
       };
 
@@ -156,6 +160,8 @@ export default {
       nazivBanke: '',
       ziroRacun: '',
       vlasnikRacuna: '',
+      provizija: '',
+      odrzavanje: '',
       active: false
     };
     this.hasSubmitted = false;

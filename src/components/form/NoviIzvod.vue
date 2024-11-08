@@ -35,16 +35,119 @@
                 </b-form-group>
               </b-col>
               <b-col cols="6">
-                <b-form-group label="Iznos uplate" label-for="iznos-uplate" class="mb-2">
+                <b-form-group label="Broj izvoda" label-for="broj-izvoda" class="mb-2">
                   <b-form-input
-                    id="iznos-uplate"
+                    id="broj-izvoda"
+                    v-model="form.brojIzvoda"
+                    placeholder="Upisite broj izvoda"
                     type="number"
-                    v-model="form.iznosUplate"
                     required
-                    :state="!hasSubmitted || form.iznosUplate !== null"
-                  ></b-form-input>
+                    :state="!hasSubmitted || form.brojIzvoda !== null"
+                    class="mb-2"
+                  />
                 </b-form-group>
               </b-col>
+            </b-row>
+            <div class="my-5 border-top" />
+            <b-row>
+              <b-col cols="6">
+                <b-form-group label="Izaberi KUF" label-for="kuf" class="mb-2">
+                  <b-form-select
+                    id="kuf"
+                    :options="kufOptions"
+                    v-model="form.brojKuf"
+                    :state="!hasSubmitted || form.brojKuf !== null"
+                  ></b-form-select>
+                </b-form-group>
+                <b-button
+                  variant="success"
+                  size="sm"
+                  @click="addEntry('KUF')"
+                >
+                  Dodaj KUF stavku
+                </b-button>
+              </b-col>
+              <b-col cols="6">
+                <b-form-group label="Izaberi KIF" label-for="kif" class="mb-2">
+                  <b-form-select
+                    id="kif"
+                    :options="kifOptions"
+                    v-model="form.brojRacuna"
+                    :state="!hasSubmitted || form.brojRacuna !== null"
+                  ></b-form-select>
+                </b-form-group>
+                <b-button
+                  variant="success"
+                  size="sm"
+                  @click="addEntry('KIF')"
+                >
+                  Dodaj KIF stavku
+                </b-button>
+              </b-col>
+            </b-row>
+            <div class="my-5 border-top" /> 
+            <b-row>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Tip</th>
+                    <th>Broj stavke</th>
+                    <th>Kupac / dobavljac</th>
+                    <th>Datum</th>
+                    <th>Iznos za uplatit</th>
+                    <th>Uplaceni iznos</th>
+                    <th>Provizija</th>
+                    <th>Ukupno</th>
+                    <th>Akcija</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(entry, index) in selectedEntries" :key="index">
+                    <td>{{ entry.type }}</td>
+                    <td>{{ entry.brojRacuna || entry.brojKuf }}</td>
+                    <td>{{ entry.kupac || entry.dobavljac || 'N/A' }} </td>
+                    <td>{{ entry.date || 'No date' }}</td>
+                    <td>{{ entry.neto || entry.bruto  }}</td>
+                    <td>
+                      <b-form-group label="Iznos uplate" label-for="iznos-uplate" class="mb-2">
+                        <b-form-input
+                          id="iznos-uplate"
+                          v-model="entry.iznosUplate"
+                          placeholder="Upisite Iznos uplate"
+                          type="number"
+                          required
+                          :state="!hasSubmitted || entry.iznosUplate !== null"
+                          class="mb-2"
+                        />
+                      </b-form-group>
+                    </td>
+                    <td>
+                      <b-form-group label="Iznos provizije" label-for="iznos-provizije" class="mb-2">
+                        <b-form-input
+                          id="iznos-provizije"
+                          v-model="entry.iznosProvizije"
+                          placeholder="Upisite Iznos provizije"
+                          type="number"
+                          required
+                          :state="!hasSubmitted || form.entryProvizije !== null"
+                          class="mb-2"
+                        />
+                      </b-form-group>
+                    </td>
+                    <td>{{ (Number(entry.iznosUplate) || 0) + (Number(entry.iznosProvizije) || 0) }}</td>
+                    <td>
+                      <b-button
+                        variant="danger"
+                        size="sm"
+                        @click="removeStavka(index)"
+                      >
+                        Ukloni
+                      </b-button>
+                    </td>
+                    </tr> 
+                </tbody>
+              </table>
+              
               <b-col cols="6">
                 <b-button class="mt-3" type="submit" variant="primary">Submit</b-button>
               </b-col>
@@ -66,11 +169,15 @@ export default {
       form: {
         datumPlacanja: null,
         iznosUplate: null,
+        brojKuf: null,
+        brojKif: null,
       },
+      selectedEntries: [],
       client: null, // Define client in data
     };
   },
   computed: {
+
     // Check if there's an active ZiroRacun
     hasActiveZiroRacun() {
       if (this.client && this.client.bankAccounts) {
@@ -89,25 +196,70 @@ export default {
     },
   },
   methods: {
+    addEntry(type) {
+      const selectedEntry = this.client[type.toLowerCase()].find(entry => entry.brojKuf === this.form.brojKuf || entry.brojRacuna === this.form.brojRacuna);
+      if (selectedEntry) {
+        const iznosUplate = selectedEntry.neto || selectedEntry.bruto;
+
+        this.selectedEntries.push({ 
+          ...selectedEntry, 
+          type,
+          iznosUplate: iznosUplate,
+          iznosProvizije: this.client.bankAccounts.find(account => account.active === true).provizija,
+        });
+        if(this.form.brojKuf) {
+          this.form.brojKuf = null;
+        } else {
+          this.form.brojRacuna = null;
+        }
+      }
+    },
+    removeStavka(index) {
+      this.selectedEntries.splice(index, 1);
+    },
     onSubmit() {
       this.hasSubmitted = true;
 
       const clientStore = useClientStore();
-      const clientKey = this.$route.params.clientKey; // Get clientKey from route params
-      const brojKuf = this.$route.query.brojKuf;      // Get brojKuf from query parameters
+      const clientKey = this.$route.params.clientKey; // Get clientKey from route params     // Get brojKuf from query parameters
 
-      // Locate client and update kuf entry
+      // Locate client from the store
       const client = clientStore.clients.find(client => client.clientKey === clientKey);
+
       if (client) {
-        const kufEntry = client.kuf.find(entry => entry.brojKuf === brojKuf);
-        
-        if (kufEntry) {
-          kufEntry.datumPlacanja = this.form.datumPlacanja;
-          kufEntry.iznosUplate = this.form.iznosUplate;
-          clientStore.saveClients();
-        } else {
-          console.error(`kuf entry with brojKuf ${brojKuf} not found`);
-        }
+        // Loop through each selected entry
+        this.selectedEntries.forEach(entry => {
+          // Check if the entry type is KUF
+          if (entry.type === 'KUF') {
+            // Find the corresponding KUF entry by brojKuf
+            const kufEntry = client.kuf.find(kuf => kuf.brojKuf === entry.brojKuf);
+            
+            if (kufEntry) {
+              // Update iznosUplate and datumUplate for KUF entry
+              kufEntry.iznosUplate = (Number(entry.iznosUplate) || 0) + (Number(entry.iznosProvizije) || 0);
+              kufEntry.datumPlacanja = this.form.datumPlacanja;
+            } else {
+              console.error(`KUF entry with brojKuf ${entry.brojKuf} not found`);
+            }
+          }
+
+          // Check if the entry type is KIF
+          if (entry.type === 'KIF') {
+            // Find the corresponding KIF entry by brojRacuna
+            const kifEntry = client.kif.find(kif => kif.brojRacuna === entry.brojRacuna);
+
+            if (kifEntry) {
+              // Update iznosUplate and datumUplate for KIF entry
+              kifEntry.iznosUplate = (Number(entry.iznosUplate) || 0) + (Number(entry.iznosProvizije) || 0);
+              kifEntry.datumPlacanja = this.form.datumPlacanja;
+            } else {
+              console.error(`KIF entry with brojRacuna ${entry.brojRacuna} not found`);
+            }
+          }
+        });
+
+        // Save the updated client data
+        clientStore.saveClients();
       } else {
         console.error('Client not found');
       }
@@ -116,14 +268,38 @@ export default {
       this.form = {
         datumPlacanja: null,
         iznosUplate: null,
+        brojKuf: null,
+        brojRacuna: null,
       };
+      this.selectedEntries = [];
       this.hasSubmitted = false;
     },
+
   },
   mounted() {
     const clientKey = this.$route.params.clientKey;
     const clientStore = useClientStore();
     this.client = clientStore.clients.find(client => client.clientKey === clientKey);
+
+    if (this.client && this.client.kuf) {
+      this.kufOptions = [
+        { value: null, text: 'Izaberite kuf' }, // First option for kuf
+        ...this.client.kuf.map(entry => ({
+          value: entry.brojKuf,
+          text: `${entry.brojKuf} - ${entry.dobavljac || 'N/A'} - ${entry.date || 'No date'}`
+        }))
+      ];
+    }
+
+    if (this.client && this.client.kif) {
+      this.kifOptions = [
+        { value: null, text: 'Izaberite kif' }, // First option for kif
+        ...this.client.kif.map(entry => ({
+          value: entry.brojRacuna,
+          text: `${entry.brojRacuna} - ${entry.kupac || 'N/A'} - ${entry.date || 'No date'}`
+        }))
+      ];
+    }
 
     // Log client data for debugging purposes
     console.log('Client:', this.client);

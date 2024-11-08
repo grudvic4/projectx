@@ -65,6 +65,14 @@
             variant="primary"
             size="sm"
             class="mr-3"
+            @click="$router.push({ name: 'izvod', params: { clientKey: client.clientKey } })"
+          >
+            Dodaj izvod
+          </b-button>
+          <b-button
+            variant="primary"
+            size="sm"
+            class="mx-3"
             @click="$router.push({ name: 'dodaj-ulazni-racun', params: { clientKey: client.clientKey } })"
           >
             Dodaj ulazni račun
@@ -72,7 +80,7 @@
           <b-button
             variant="success"
             size="sm"
-            class="mx-3"
+            class="mr-3"
             @click="$router.push({ name: 'dodaj-izlazni-racun', params: { clientKey: client.clientKey } })"
           >
             Dodaj izlazni račun

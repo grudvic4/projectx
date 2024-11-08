@@ -30,7 +30,7 @@
               </tr>
               <tr v-for="(client, index) in filteredKif" :key="client.brojRacuna">
                 <td>{{ index + 1 }}</td>
-                <td>{{ client.date }}</td>
+                <td>{{ client.datumPlacanja }}</td>
                 <td>{{ client.brojRacuna }}</td>
                 <td></td>
                 <td>{{ client.iznosUplate }}</td>
@@ -45,7 +45,7 @@
               </tr>
               <tr v-for="(client, index) in filteredKuf" :key="client.brojKuf">
                 <td>{{ index + 1 }}</td>
-                <td>{{ client.date }}</td>
+                <td>{{ client.datumPlacanja }}</td>
                 <td>{{ client.brojKuf }}</td>
                 <td></td>
                 <td></td>
