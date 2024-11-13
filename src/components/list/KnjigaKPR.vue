@@ -56,7 +56,7 @@
                 <td>0</td>
                 <td>0</td>
                 <td>0</td>
-                <td>{{ client.iznosUplate }}</td>
+                <td>{{ Number(client.iznosUplate) + Number(client.iznosProvizije) }}</td>
                 <td>0</td>
                 <td>{{ client.iznosUplate }}</td>
               </tr>
@@ -94,6 +94,11 @@ export default {
         ? this.client.kuf.filter(item => item.iznosUplate !== null && item.iznosUplate > 0)
         : [];
     },
+  },
+  ukupnaUplataKUF() {
+    return this.filteredKuf.reduce((acc, item) => {
+      return acc + (Number(item.iznosUplate) || 0) + (Number(item.iznosProvizije) || 0);
+    }, 0);
   },
   created() {
     const clientKey = this.$route.params.clientKey;
