@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <b-container>
     <b-row class="text-center my-5" v-if="!hasActiveZiroRacun">
       <b-col cols="12">
         <h4 class="mb-5 text-danger">Trenutno nemate dodanu banku, <br>  da bi dodali izvod morate imati 1 aktivan Žiro račun</h4>
@@ -19,11 +19,37 @@
           <h4>Aktivan žiro račun: {{ activeZiroRacun || 'Nema aktivnog računa' }}</h4>
         </b-col>
       </b-row>
+      <b-row class="justify-content-center mb-5">
+        <b-col cols="2">
+          <p>Pocetno stanje: {{ activePocetnoStanje }} {{  activeValutaRacuna }}</p>
+        </b-col>
+        <b-col cols="2">
+          <b-form>
+            <b-form-group label="Promjeni aktivni racun" label-for="izmjena-aktivni-racun" class="mb-2">
+              <b-form-select
+                id="izmjena-aktivni-racun"
+                v-model="selectedZiroRacun"  
+                :options="client.bankAccounts.map(account => ({
+                  value: account.ziroRacun,
+                  text: account.ziroRacun
+                }))"
+              ></b-form-select>
+            </b-form-group>
+            <b-button
+              variant="success"
+              size="sm"
+              @click="setAktivniRacun"
+            >
+              Promjeni aktivni ziro racun
+            </b-button>
+          </b-form>
+        </b-col>
+      </b-row>
       <b-row class="justify-content-center">
-        <b-col cols="12" lg="8">
+        <b-col cols="12">
           <b-form @submit.prevent="onSubmit">
-            <b-row>
-              <b-col cols="6">
+            <b-row class="justify-content-center">
+              <b-col cols="3">
                 <b-form-group label="Datum plaćanja" label-for="datum-placanja" class="mb-2">
                   <b-form-datepicker
                     id="datum-placanja"
@@ -35,7 +61,7 @@
                   />
                 </b-form-group>
               </b-col>
-              <b-col cols="6">
+              <b-col cols="3">
                 <b-form-group label="Broj izvoda" label-for="broj-izvoda" class="mb-2">
                   <b-form-input
                     id="broj-izvoda"
@@ -50,8 +76,8 @@
               </b-col>
             </b-row>
             <div class="my-5 border-top" />
-            <b-row>
-              <b-col cols="6">
+            <b-row class="justify-content-center"> 
+              <b-col cols="3">
                 <b-form-group label="Izaberi KUF" label-for="kuf" class="mb-2">
                   <b-form-select
                     id="kuf"
@@ -68,7 +94,7 @@
                   Dodaj KUF stavku
                 </b-button>
               </b-col>
-              <b-col cols="6">
+              <b-col cols="3">
                 <b-form-group label="Izaberi KIF" label-for="kif" class="mb-2">
                   <b-form-select
                     id="kif"
@@ -85,16 +111,33 @@
                   Dodaj KIF stavku
                 </b-button>
               </b-col>
+              <b-col cols="3">
+                <b-form-group label="Dodaj ostalo" label-for="ostalo" class="mb-2">
+                  <b-form-select
+                    id="ostalo"
+                    :options="ostaloOptions"
+                    v-model="form.ostaleStavke"
+                    :state="!hasSubmitted || form.ostaleStavke !== null"
+                  ></b-form-select>
+                </b-form-group>
+                <b-button
+                  variant="success"
+                  size="sm"
+                  @click="addEntry(form.ostaleStavke)"
+                >
+                  Dodaj stavku
+                </b-button>
+              </b-col>
             </b-row>
             <div class="my-5 border-top" /> 
             <b-row>
               <table>
                 <thead>
                   <tr>
-                    <th>Tip</th>
                     <th>Broj stavke</th>
                     <th>Kupac / dobavljac</th>
                     <th>Datum</th>
+                    <th>Opis</th>
                     <th>Iznos za uplatit</th>
                     <th>Uplaceni iznos</th>
                     <th>Provizija</th>
@@ -104,11 +147,23 @@
                 </thead>
                 <tbody>
                   <tr v-for="(entry, index) in selectedEntries" :key="index">
-                    <td>{{ entry.type }}</td>
                     <td>{{ entry.brojRacuna || entry.brojKuf }}</td>
                     <td>{{ entry.kupac || entry.dobavljac || 'N/A' }} </td>
                     <td>{{ entry.date || 'No date' }}</td>
-                    <td>{{ entry.neto || entry.bruto  }}</td>
+                    <td>
+                      <b-form-group label="Opis stavke" label-for="opis-stavke" class="mb-2">
+                        <b-form-input
+                          id="opis-stavke"
+                          v-model="entry.opisStavke"
+                          placeholder="Upisite Opis stavke"
+                          type="text"
+                          required
+                          :state="!hasSubmitted || entry.opisStavke !== null"
+                          class="mb-2"
+                        />
+                      </b-form-group>
+                    </td>
+                    <td>{{ entry.neto || entry.bruto  }}{{  activeValutaRacuna }}</td>
                     <td>
                       <b-form-group label="Iznos uplate" label-for="iznos-uplate" class="mb-2">
                         <b-form-input
@@ -135,7 +190,7 @@
                         />
                       </b-form-group>
                     </td>
-                    <td>{{ (Number(entry.iznosUplate) || 0) + (Number(entry.iznosProvizije) || 0) }}</td>
+                    <td>{{ (Number(entry.iznosUplate) || 0) + (Number(entry.iznosProvizije) || 0) }}{{  activeValutaRacuna }}</td>
                     <td>
                       <b-button
                         variant="danger"
@@ -146,6 +201,26 @@
                       </b-button>
                     </td>
                     </tr> 
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td>
+                        Novi saldo: 
+                        {{ selectedEntries.reduce((total, entry) => {
+                          if (entry.type === 'KUF') {
+                            return total - (Number(entry.iznosUplate) || 0) - (Number(entry.iznosProvizije) || 0);
+                          } else {
+                            return total + (Number(entry.iznosUplate) || 0) - (Number(entry.iznosProvizije) || 0);
+                          }
+                        }, Number(activePocetnoStanje)) }}
+                        {{ activeValutaRacuna }}
+                      </td>
+                    </tr>
                 </tbody>
               </table>
               
@@ -157,7 +232,7 @@
         </b-col>
       </b-row>
     </div>
-  </div>
+  </b-container>
 </template>
 
 <script>
@@ -172,9 +247,11 @@ export default {
         iznosUplate: null,
         brojKuf: null,
         brojKif: null,
+        ostaleStavke: null,
       },
       selectedEntries: [],
-      client: null, // Define client in data
+      client: null, 
+      selectedZiroRacun: null,// Define client in data
     };
   },
   computed: {
@@ -195,6 +272,20 @@ export default {
       }
       return 'Nema aktivnog računa'; // Default message if client or bankAccounts is not available
     },
+    activePocetnoStanje() {
+      if (this.client && this.client.bankAccounts) {
+        const activeAccount = this.client.bankAccounts.find(account => account.active === true);
+        return activeAccount ? activeAccount.pocetnoStanje : 'Nema aktivnog računa'; // Default message if no active account
+      }
+      return 'Nema aktivnog računa';
+    },
+    activeValutaRacuna() {
+      if (this.client && this.client.bankAccounts) {
+        const activeAccount = this.client.bankAccounts.find(account => account.active === true);
+        return activeAccount ? activeAccount.valutaRacuna : 'Nema aktivnog računa'; // Default message if no active account
+      }
+      return 'Nema aktivnog računa';
+    }
   },
   methods: {
     addEntry(type) {
@@ -203,6 +294,9 @@ export default {
         selectedEntry = this.client.kuf.find(entry => entry.brojKuf === this.form.brojKuf);
       } else if (type === 'KIF') {
         selectedEntry = this.client.kif.find(entry => entry.brojRacuna === this.form.brojRacuna);
+      } else  {
+        selectedEntry == this.selectedEntries.push({ type: this.form.ostaleStavke });
+        console.log(type);
       }
       if (selectedEntry) {
         const iznosUplate = selectedEntry.neto || selectedEntry.bruto;
@@ -218,7 +312,9 @@ export default {
         } else {
           this.form.brojRacuna = null;
         }
+      
       }
+      
     },
     removeStavka(index) {
       this.selectedEntries.splice(index, 1);
@@ -244,6 +340,9 @@ export default {
               // Update iznosUplate and datumUplate for KUF entry
               kufEntry.iznosUplate = (Number(entry.iznosUplate) || 0) + (Number(entry.iznosProvizije) || 0);
               kufEntry.datumPlacanja = this.form.datumPlacanja;
+              kufEntry.iznosProvizije = entry.iznosProvizije;
+              kufEntry.opisStavke = entry.opisStavke;
+              kufEntry.brojIzvoda = this.form.brojIzvoda;
             } else {
               console.error(`KUF entry with brojKuf ${entry.brojKuf} not found`);
             }
@@ -258,6 +357,9 @@ export default {
               // Update iznosUplate and datumUplate for KIF entry
               kifEntry.iznosUplate = (Number(entry.iznosUplate) || 0) + (Number(entry.iznosProvizije) || 0);
               kifEntry.datumPlacanja = this.form.datumPlacanja;
+              kifEntry.iznosProvizije = entry.iznosProvizije;
+              kifEntry.opisStavke = entry.opisStavke;
+              kifEntry.brojIzvoda = this.form.brojIzvoda;
             } else {
               console.error(`KIF entry with brojRacuna ${entry.brojRacuna} not found`);
             }
@@ -278,17 +380,34 @@ export default {
         brojRacuna: null,
       };
       this.selectedEntries = [];
-      this.hasSubmitted = false;
+      this.form.datumPlacanja = null;
+      this.form.brojIzvoda = null;
     },
+    setAktivniRacun() {
+      // Ensure a valid account is selected
+      if (!this.selectedZiroRacun) {
+        return;
+      }
 
+      // Set the active status for the selected bank account
+      this.client.bankAccounts = this.client.bankAccounts.map(account => ({
+        ...account,
+        active: account.ziroRacun === this.selectedZiroRacun,  // Mark selected account as active
+      }));
+
+      // Save the updated client data in the store
+      const clientStore = useClientStore();
+      clientStore.saveClients(this.client);
+
+    },
   },
-  mounted() {
+  created() {
     const clientKey = this.$route.params.clientKey;
     const clientStore = useClientStore();
     this.client = clientStore.clients.find(client => client.clientKey === clientKey);
      const brojKufQuery = this.$route.query.brojKuf;
      const brojRacunaQuery = this.$route.query.brojRacuna;
-     
+    
       if (brojKufQuery) { // Use the correct variable name here
         this.form.brojKuf = brojKufQuery;
         this.addEntry('KUF');
@@ -318,6 +437,15 @@ export default {
       ];
     }
 
+    this.ostaloOptions = [
+      { value: null, text: 'Izaberite ostalo' }, // First option for ostalo
+      { value: 'provizija', text: 'Provizija' },
+      { value: 'place', text: 'Burto place zaposlenika' },
+      { value: 'doprinosi', text: 'Placeni doprinosi poduzetnika' }
+    ];
+
+    const today = new Date();
+    this.form.datumPlacanja = today.toISOString().split('T')[0];
   },
 };
 </script>

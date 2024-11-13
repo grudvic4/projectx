@@ -8,7 +8,6 @@ import { createPinia, PiniaVuePlugin } from "pinia";
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
 
-
 Vue.use(PiniaVuePlugin);
 export const pinia = createPinia();
 pinia.use(({ store }) => {

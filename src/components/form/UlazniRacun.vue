@@ -68,7 +68,6 @@
                   id="rok-placanja"
                   type="number"
                   v-model="form.rokPlacanja"
-                  required
                   :state="!hasSubmitted || form.type !== null"
                 ></b-form-input>
               </b-form-group>
@@ -128,7 +127,7 @@
               </b-form-group>
             </b-col>
             <b-col cols="6">
-              <b-form-group label="Bruto iznos u valuti placanja" label-for="bruto" class="mb-2">
+              <b-form-group label="Iznos fakture" label-for="bruto" class="mb-2">
                 <b-form-input
                   id="bruto"
                   type="number"
@@ -342,8 +341,13 @@ export default {
   computed: {
     nextKufNumber() {
       const store = useClientStore();
+      // if kuf.lenght is 0 then nextKufNumber is 1
+      if(!store.clients.find(client => client.clientKey === this.$route.params.clientKey).kuf) {
+        return 1;
+      } else {
       const nextKufNumber = store.clients.find(client => client.clientKey === this.$route.params.clientKey).kuf.length + 1;
       return nextKufNumber;  // Assuming `clientStore` holds the Kufs and it's an array
+    }
     },
     dobavljacOptions() {
       const store = useDobavljacStore();

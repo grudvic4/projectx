@@ -36,6 +36,17 @@
               </b-form-group>
             </b-col> 
             <b-col cols="6">
+              <b-form-group label="Pocetno stanje" label-for="pocetno-stanje" class="mb-2">
+                <b-form-input
+                  id="pocetno-stanje"
+                  v-model="form.pocetnoStanje"
+                  type="number"
+                  :state="!hasSubmitted || form.pocetnoStanje.length > 0"
+                  placeholder="Upisite pocetno stanje racun"
+                ></b-form-input>
+              </b-form-group>
+            </b-col> 
+            <b-col cols="6">
               <b-form-group label="Iznos provizije" label-for="provizija" class="mb-2">
                 <b-form-input
                   id="provizija"
@@ -56,14 +67,14 @@
               </b-form-group>
             </b-col> 
             <b-col cols="6">
-              <b-form-group label="Ime i prezime vlasnika" label-for="vlasnik-racuna" class="mb-2">
-                <b-form-input
-                  id="vlasnik-racuna"
-                  v-model="form.vlasnikRacuna"
+              <b-form-group label="Valuta" label-for="valuta-racuna" class="mb-2">
+                <b-form-select
+                  id="valuta-racuna"
+                  v-model="form.valutaRacuna"
+                  :options="valutaOptions"
                   required
-                  :state="!hasSubmitted || form.vlasnikRacuna.length > 0"
-                  placeholder="Upisite Ime i prezime vlasnika"
-                ></b-form-input>
+                  :state="!hasSubmitted || form.valutaRacuna !== null"
+                ></b-form-select>
               </b-form-group>
             </b-col> 
             <b-col cols="6">
@@ -105,11 +116,18 @@ export default {
       form: {
         nazivBanke: '',
         ziroRacun: '',
-        vlasnikRacuna: '',
+        valutaRacuna: null,
         provizija: '',
         odrzavanje: '',
-        active: false
+        active: false,
+        pocetnoStanje: null,
       },
+      valutaOptions: [
+        { value: null, text: 'Odaberite' },
+        { value: 'km', text: 'KM' },
+        { value: 'eur', text: 'EUR' },
+        { value: 'usd', text: 'USD' },
+      ],
     };
   },
   created() {
@@ -138,10 +156,11 @@ export default {
       const bankAccount = { 
         nazivBanke: this.form.nazivBanke,
         ziroRacun: this.form.ziroRacun,
-        vlasnikRacuna: this.form.vlasnikRacuna,
+        valutaRacuna: this.form.valutaRacuna,
         provizija: this.form.provizija,
         odrzavanje: this.form.odrzavanje,
-        active: isFirstBankAccount, // Set active to true if it is the first bank account
+        active: isFirstBankAccount,
+        pocetnoStanje: this.form.pocetnoStanje, // Set active to true if it is the first bank account
       };
 
       // Add the bank account to the client
@@ -159,10 +178,11 @@ export default {
     this.form = {
       nazivBanke: '',
       ziroRacun: '',
-      vlasnikRacuna: '',
+      valutaRacuna: null,
       provizija: '',
       odrzavanje: '',
-      active: false
+      active: false,
+      pocetnoStanje: null,
     };
     this.hasSubmitted = false;
   }

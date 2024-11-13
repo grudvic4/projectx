@@ -42,17 +42,6 @@
               </b-form-group>
             </b-col>
             <b-col cols="6">
-              <b-form-group label="Narudzbenica" label-for="narudzbenica" class="mb-2">
-                <b-form-input
-                  id="narudzbenica"
-                  type="number"
-                  v-model="form.narudzbenica"
-                  required
-                  :state="!hasSubmitted || form.type !== null"
-                ></b-form-input>
-              </b-form-group>
-            </b-col>
-            <b-col cols="6">
               <b-form-group label="Napomena" label-for="napomena" class="mb-2">
                 <b-form-input
                   id="napomena"
@@ -68,7 +57,6 @@
                   id="rok-placanja"
                   type="number"
                   v-model="form.rokPlacanja"
-                  required
                   :state="!hasSubmitted || form.type !== null"
                 ></b-form-input>
               </b-form-group>
@@ -139,7 +127,7 @@
               </b-form-group>
             </b-col>
             <b-col cols="6">
-              <b-form-group label="Neto iznos u valuti placanja sa porezom" label-for="neto" class="mb-2">
+              <b-form-group label="Iznos fakture" label-for="neto" class="mb-2">
                 <b-form-input
                   id="neto"
                   type="number"
@@ -282,7 +270,6 @@ export default {
         brojRacuna: null,
         date: null,
         kupac: null,
-        narudzbenica: null,
         napomena: null,
         rokPlacanja: null,
         rokDatum: null,
@@ -348,8 +335,12 @@ export default {
   computed: {
     nextKifNumber() {
       const store = useClientStore();
+      if(!store.clients.find(client => client.clientKey === this.$route.params.clientKey).kif) {
+        return 1;
+      } else {
       const nextKifNumber = store.clients.find(client => client.clientKey === this.$route.params.clientKey).kif.length + 1;
       return nextKifNumber;
+    }
     },
     kupacOptions() {
       const store = useKupacStore()
@@ -399,28 +390,26 @@ export default {
       this.form = {
         brojRacuna: null,
         date: null,
-        dobavljac: null,
-        brojFakture: null,
-        datumFakture: null,
+        kupac: null,
+        napomena: null,
         rokPlacanja: null,
         rokDatum: null,
         obracunPdv: null,
+        vrstaFakture: null,
         vrstaPrometa: null,
         knjiga: null,
         valuta: null,
-        bruto: null,
         neto: null,
+        inoUsluge: null,
         brutoPDV: null,
         netoPDV: null,
-        iznosPdv: null,
         rabat: null,
         kasaSkonto: null,
         placanjeDo: null,
-        osnovicaUlazniPDVodbit: null,
-        ulazniPDVodbit: null,
-        nabavkaPoljoprivrednika: null,
-        pauslaNaknada: null,
-        ulazniPDVNePrikazuje: null
+        statistickaVrijednost: null,
+        osnovicaPDV: null,
+        iznosPdv: null,
+        neoporezivaOsnovica: null
       };
       this.hasSubmitted = false;  // Reset submission flag
     },

@@ -30,11 +30,11 @@
               </tr>
               <tr v-for="(client, index) in filteredKif" :key="client.brojRacuna">
                 <td>{{ index + 1 }}</td>
-                <td>{{ client.datumPlacanja }}</td>
-                <td>{{ client.brojRacuna }}</td>
-                <td></td>
-                <td>{{ client.iznosUplate }}</td>
+                <td>{{ new Date(client.datumPlacanja).toLocaleDateString('en-GB') }}</td>
+                <td>{{ client.brojIzvoda }}</td>
+                <td>{{ client.opisStavke}}</td>
                 <td>0</td>
+                <td>{{ client.iznosUplate }}</td>
                 <td>0</td>
                 <td>0</td>
                 <td>{{ client.iznosUplate }}</td>
@@ -45,18 +45,18 @@
               </tr>
               <tr v-for="(client, index) in filteredKuf" :key="client.brojKuf">
                 <td>{{ index + 1 }}</td>
-                <td>{{ client.datumPlacanja }}</td>
-                <td>{{ client.brojKuf }}</td>
+                <td>{{ new Date(client.datumPlacanja).toLocaleDateString('en-GB') }}</td>
+                <td>{{ client.brojIzvoda }}</td>
+                <td>{{ client.opisStavke }}</td>
                 <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
-                <td></td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
                 <td>{{ client.iznosUplate }}</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
                 <td>0</td>
                 <td>{{ client.iznosUplate }}</td>
               </tr>
@@ -95,7 +95,7 @@ export default {
         : [];
     },
   },
-  mounted() {
+  created() {
     const clientKey = this.$route.params.clientKey;
     const clientStore = useClientStore();
 

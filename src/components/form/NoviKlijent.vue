@@ -123,7 +123,6 @@
                       maxlength="12"
                       placeholder="Upisite PDV klijenta"
                       :state="!hasSubmitted || pdvValid || pdvTouched"
-                      required
                       @input="hasSubmitted = false"
                       @blur="validatePDV"
                     >

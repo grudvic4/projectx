@@ -18,13 +18,13 @@
             {{ data.item.brojKuf }}
           </template>
           <template #cell(date)="data">
-            {{ data.item.date }}
+            {{ new Date(data.item.date).toLocaleDateString('en-GB') }}
           </template>
           <template #cell(bruto)="data">
             {{ data.item.bruto }}
           </template>
           <template #cell(placeno-datum)="data">
-            {{ data.item.datumPlacanja }}
+            <span v-if="isValidDate(data.item.datumPlacanja)">{{ formatDate(data.item.datumPlacanja) }}</span>
           </template>
           <template #cell(placeno-iznos)="data">
             {{ data.item.iznosUplate }}
@@ -45,7 +45,6 @@
 
 <script>
 import { useClientStore } from '@/store/clientStore';
-import clientMock from '@/data/clientMock';
 
 export default {
   props: {
@@ -70,12 +69,12 @@ export default {
       ]
     };
   },
-  mounted() {
+  created() {
     const clientKey = this.$route.params.clientKey;
     const clientStore = useClientStore();
 
     // Combine clients from store and mock data
-    const combinedClients = [...clientStore.clients, ...clientMock];
+    const combinedClients = [...clientStore.clients];
 
     // Find the client based on the clientKey from the URL
     this.client = combinedClients.find(client => client.clientKey === clientKey);
@@ -91,6 +90,13 @@ export default {
         params: { clientKey: this.$route.params.clientKey }, // Pass clientKey as a param
         query: { brojKuf: brojKuf } // Add brojKuf as a query parameter
       };
+    },
+    isValidDate(date) {
+      const parsedDate = new Date(date);
+      return !isNaN(parsedDate.getTime());
+    },
+    formatDate(date) {
+      return new Date(date).toLocaleDateString('en-GB');
     }
   }
 };

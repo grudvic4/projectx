@@ -38,7 +38,6 @@
 import { Component, Vue } from "vue-property-decorator";
 import DetaljiKlijent from "@/components/single/DetaljiKlijent.vue";
 import KnjigaEpo from "@/components/list/KnjigaEpo.vue";
-import clientMock from '@/data/clientMock';
 import PostojeciDobavljaci from '@/components/list/PostojeciDobavljaci.vue'; // Adjust the path if needed
 import { useClientStore } from "@/store/clientStore";
 import PostojeciKupci from "@/components/list/PostojeciKupci.vue";
@@ -60,7 +59,7 @@ import KnjigaKPR from "@/components/list/KnjigaKPR.vue";
 export default class NewClient extends Vue {
   get combinedClients() {
     const clientStore = useClientStore();
-    return [...clientStore.clients, ...clientMock]; // Combine clients from store and mock
+    return [...clientStore.clients]; // Combine clients from store and mock
   }
 }
 </script>

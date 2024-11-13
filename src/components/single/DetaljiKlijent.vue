@@ -4,11 +4,11 @@
       <b-col cols="12" lg="3">
         <b-card title="Podaci o vlasniku" class="mb-3">
           <p class="mb-0">1. JMB:</p>
-          <p>{{ client.vlasnikJMBG }}</p>
+          <p v-if="client && client.vlasnikJMBG">{{ client.vlasnikJMBG }}</p>
           <p class="mb-0">2. Ime i prezime:</p>
-          <p>{{ client.vlasnikImePrezime }}</p>
+          <p v-if="client && client.vlasnikImePrezime">{{ client.vlasnikImePrezime }}</p>
           <p class="mb-0">3. Adresa:</p>
-          <p>{{ client.vlasnikAdresa }}</p>
+          <p v-if="client && client.vlasnikAdresa">{{ client.vlasnikAdresa }}</p>
         </b-card>
       </b-col>
       <b-col cols="12" lg="4">
@@ -111,7 +111,6 @@
 
 <script>
 import { useClientStore } from '@/store/clientStore';
-import clientMock from '@/data/clientMock';
 
 export default {
   data() {
@@ -141,11 +140,11 @@ export default {
       clientStore.saveClients(this.client);
     },
   },
-  mounted() {
+  created() {
     const clientKey = this.$route.params.clientKey;
     const clientStore = useClientStore();
 
-    const combinedClients = [...clientStore.clients, ...clientMock];
+    const combinedClients = [...clientStore.clients];
     this.client = combinedClients.find(client => client.clientKey === clientKey);
 
     if (!this.client) {

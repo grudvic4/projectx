@@ -27,9 +27,11 @@
                 <td>{{ index + 1 }}</td>
                 <td>{{ client.kupac }}</td>
                 <td>{{ client.brojRacuna }}</td>
-                <td>{{ client.date }}</td>
+                <td>{{ new Date(client.date).toLocaleDateString('en-GB') }}</td>
                 <td>{{ client.neto }}</td>
-                <td>{{ client.datumPlacanja }}</td> <!-- Add your data here -->
+                <td v-if="isValidDate(client.datumPlacanja)">
+                  {{ formatDate(client.datumPlacanja) }}
+                </td><!-- Add your data here -->
                 <td>{{ client.iznosUplate }}</td> <!-- Add your data here -->
                 <td></td> <!-- Add your data here -->
                 <td></td> <!-- Add your data here -->
@@ -47,9 +49,11 @@
                 <td></td> <!-- Add your data here -->
                 <td></td> <!-- Add your data here -->
                 <td>{{ client.brojKuf }}</td>
-                <td>{{ client.date }}</td>
+                <td>{{ new Date(client.date).toLocaleDateString('en-GB') }}</td>
                 <td>{{ client.bruto }}</td>
-                <td>{{ client.datumPlacanja }}</td> <!-- Add your data here -->
+                <td v-if="isValidDate(client.datumPlacanja)">
+                  {{ formatDate(client.datumPlacanja) }}
+                </td>
                 <td>{{ client.iznosUplate }}</td> <!-- Add your data here -->
                 <td></td>
               </tr>
@@ -62,8 +66,7 @@
 </template>
 
 <script>
-import { useClientStore } from '@/store/clientStore';
-import clientMock from '@/data/clientMock'; // Import your mock data
+import { useClientStore } from '@/store/clientStore';// Import your mock data
 
 export default {
   props: {
@@ -77,13 +80,21 @@ export default {
       client: null // Holds the found client data
     };
   },
-  
-  mounted() {
+  methods: {
+    isValidDate(date) {
+      const parsedDate = new Date(date);
+      return !isNaN(parsedDate.getTime());
+    },
+    formatDate(date) {
+      return new Date(date).toLocaleDateString('en-GB');
+    }
+  },
+  created() {
     const clientKey = this.$route.params.clientKey;
     const clientStore = useClientStore();
 
     // Combine clients from store and mock data
-    const combinedClients = [...clientStore.clients, ...clientMock];
+    const combinedClients = [...clientStore.clients];
 
     // Find the client based on the clientKey from the URL
     this.client = combinedClients.find(client => client.clientKey === clientKey);

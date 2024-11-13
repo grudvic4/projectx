@@ -55,8 +55,7 @@
 </template>
 
 <script>
-import { useClientStore } from '@/store/clientStore'; // Adjust the path if needed
-import clientMock from '@/data/clientMock'; // Import your mock data
+import { useClientStore } from '@/store/clientStore';// Import your mock data
 
 export default {
   data() {
@@ -68,7 +67,7 @@ export default {
     clients() {
       const clientStore = useClientStore();
       // Combine the clients from the store and the mock data
-      return [...clientStore.clients, ...clientMock];
+      return [...clientStore.clients];
     }
   },
   methods: {
