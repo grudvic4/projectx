@@ -53,12 +53,18 @@
                 <td></td>
                 <td></td>
                 <td></td>
+                <td>
+                  <span v-if="client.tipNaplate === 'ostalo'">0</span>
+                  <span v-else>{{ client.iznosUplate }}</span>
+                </td>
                 <td>0</td>
                 <td>0</td>
+                <td>
+                  <span v-if="client.tipNaplate === 'ostalo'">{{ Number(client.iznosUplate) + Number(client.iznosProvizije) }}</span>
+                  <span v-else>{{ Number(client.iznosProvizije) }}</span>
+                </td>
                 <td>0</td>
                 <td>{{ Number(client.iznosUplate) + Number(client.iznosProvizije) }}</td>
-                <td>0</td>
-                <td>{{ client.iznosUplate }}</td>
               </tr>
             </tbody>
           </table>

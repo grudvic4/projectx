@@ -140,6 +140,7 @@
                     <th>Opis</th>
                     <th>Iznos za uplatit</th>
                     <th>Uplaceni iznos</th>
+                    <th>Tip Naplate</th>
                     <th>Provizija</th>
                     <th>Ukupno</th>
                     <th>Akcija</th>
@@ -176,6 +177,16 @@
                           class="mb-2"
                         />
                       </b-form-group>
+                    </td>
+                    <td >
+                      <b-form-group v-if="entry.type === 'KUF'" label="Izaberi tip naplate" label-for="tip-naplate" class="mb-2">
+                        <b-form-select
+                          id="tip-naplate"
+                          :options="tipNaplateOptions"
+                          v-model="entry.tipNaplate"
+                          :state="!hasSubmitted || form.ostaleStavke !== null"
+                        ></b-form-select>
+                    </b-form-group>
                     </td>
                     <td>
                       <b-form-group label="Iznos provizije" label-for="iznos-provizije" class="mb-2">
@@ -248,10 +259,11 @@ export default {
         brojKuf: null,
         brojKif: null,
         ostaleStavke: null,
+        tipNaplate: null,
       },
       selectedEntries: [],
       client: null, 
-      selectedZiroRacun: null,// Define client in data
+      selectedZiroRacun: null,
     };
   },
   computed: {
@@ -350,6 +362,7 @@ export default {
               kufEntry.iznosProvizije = entry.iznosProvizije;
               kufEntry.opisStavke = entry.opisStavke;
               kufEntry.brojIzvoda = this.form.brojIzvoda;
+              kufEntry.tipNaplate = entry.tipNaplate;
             } else {
               console.error(`KUF entry with brojKuf ${entry.brojKuf} not found`);
             }
@@ -450,6 +463,12 @@ export default {
       { value: 'place', text: 'Burto place zaposlenika' },
       { value: 'doprinosi', text: 'Placeni doprinosi poduzetnika' }
     ];
+
+    this.tipNaplateOptions = [
+      { value: null, text: 'Izaberite tip naplate' }, // First option for tip naplate
+      { value: 'roba_materijal', text: 'U robi / materijalu' },
+      { value: 'ostalo', text: 'Ostalo' },
+    ]
 
     const today = new Date();
     this.form.datumPlacanja = today.toISOString().split('T')[0];
