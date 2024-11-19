@@ -301,40 +301,39 @@ export default {
   },
   methods: {
     addEntry(type) {
-  let selectedEntry = null;
-  
-  if (type === 'KUF') {
-    selectedEntry = this.client.kuf.find(entry => entry.brojKuf === this.form.brojKuf);
-  } else if (type === 'KIF') {
-    selectedEntry = this.client.kif.find(entry => entry.brojRacuna === this.form.brojRacuna);
-  } else  {
-    this.selectedEntries.push({ type: this.form.ostaleStavke });
-    console.log(type);
-  }
+      let selectedEntry = null;
+      
+      if (type === 'KUF') {
+        selectedEntry = this.client.kuf.find(entry => entry.brojKuf === this.form.brojKuf);
+      } else if (type === 'KIF') {
+        selectedEntry = this.client.kif.find(entry => entry.brojRacuna === this.form.brojRacuna);
+      } else  {
+        this.selectedEntries.push({ type: this.form.ostaleStavke });
+        console.log(type);
+      }
 
-  if (selectedEntry) {
-    const iznosUplate = selectedEntry.neto || selectedEntry.bruto;
+      if (selectedEntry) {
+        const iznosUplate = selectedEntry.neto || selectedEntry.bruto;
 
-    // Use ternary operators to decide the value of iznosProvizije
-    const iznosProvizije = type === 'KIF' ? 0 : this.client.bankAccounts.find(account => account.active === true).provizija;
+        // Use ternary operators to decide the value of iznosProvizije
+        const iznosProvizije = type === 'KIF' ? 0 : this.client.bankAccounts.find(account => account.active === true).provizija;
 
-    // Push the entry to selectedEntries
-    this.selectedEntries.push({
-      ...selectedEntry,
-      type,
-      iznosUplate: iznosUplate,
-      iznosProvizije: iznosProvizije
-    });
+        // Push the entry to selectedEntries
+        this.selectedEntries.push({
+          ...selectedEntry,
+          type,
+          iznosUplate: iznosUplate,
+          iznosProvizije: iznosProvizije
+        });
 
-    // Reset form values
-    if (this.form.brojKuf) {
-      this.form.brojKuf = null;
-    } else {
-      this.form.brojRacuna = null;
-    }
-  }
-},
-
+        // Reset form values
+        if (this.form.brojKuf) {
+          this.form.brojKuf = null;
+        } else {
+          this.form.brojRacuna = null;
+        }
+      }
+    },
     removeStavka(index) {
       this.selectedEntries.splice(index, 1);
     },

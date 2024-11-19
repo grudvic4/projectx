@@ -12,7 +12,7 @@ import ListaDobavljaca from "@/pages/ListaDobavljaca.vue";
 import KupacList from "@/pages/KupacList.vue";
 import NoviIzvod from "@/components/form/NoviIzvod.vue";
 import DodajNoviBankovniRacun from "@/pages/DodajBankovniRacun.vue";
-import NovaBlagajna from "@/components/form/NovaBlagajna.vue";
+import BlagajnaForm from "@/components/form/BlagajnaForm.vue";
 import EditBankovniRacun from "@/components/form/EditBankovniRacun.vue";
 
 Vue.use(VueRouter);
@@ -74,9 +74,9 @@ const routes: Array<RouteConfig> = [
     component: NoviIzvod
   },
   {
-    path: '/blagajna',
+    path: '/blagajna?clientKey=:clientKey',
     name: 'blagajna',
-    component: NovaBlagajna
+    component: BlagajnaForm
   },
   {
     path: "/dodaj-bankovni-racun?clientKey=:clientKey",

@@ -90,6 +90,15 @@
             variant="outline-primary"
             size="sm"
             class="mr-3"
+            @click="$router.push({ name: 'blagajna', params: { clientKey: client.clientKey } })"
+          >
+            Blagajna
+          </b-button>
+          
+          <b-button
+            variant="outline-primary"
+            size="sm"
+            class="mx-3"
             @click="$router.push({ name: 'dodaj-ulazni-racun', params: { clientKey: client.clientKey } })"
           >
             Dodaj kupca
